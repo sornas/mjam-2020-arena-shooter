@@ -16,6 +16,9 @@ import pygame as pg
 # For official pygame documentation see:
 #   https://www.pygame.org/docs/
 
+import math
+# sin, cos and other interesting things.
+
 #
 # Input handling
 #
@@ -92,13 +95,44 @@ def key_pressed(key):
 
 
 #
+# Simple sprite drawing
+#
+
+def draw_centered(img, pos, scale=(1., 1.), degrees=0):
+    """Draw img around position, scale the image and then rotate it in degrees before drawing."""
+    if scale[0] != 1. or scale[1] != 1.:
+        w, h = img.get_size()
+        w = int(w * scale[0])
+        h = int(h * scale[1])
+        img = pg.transform.scale(img, (w, h))
+    if degrees:
+        # Pygame rotates CCW in degrees, for some reason.
+        img = pg.transform.rotate(img, -degrees)
+    w, h = img.get_size()
+    window = pg.display.get_surface()
+    window.blit(img, (int(pos[0] - w / 2.0), int(pos[1] - h / 2.0)))
+
+
+def clear_screen(color):
+    """Fill the screen with color"""
+    window = pg.display.get_surface()
+    top_left = (0, 0)
+    bottom_right = pg.display.get_surface().get_size()
+    pg.draw.rect(window, color, (top_left, bottom_right))
+
+
+#
 # Main loop
 # Do your stuff here!
 # :D
 #
 
+teapot = pg.image.load("teapot.png")
+
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
+FRAMERATE = 60
+DELTA = 1 / FRAMERATE
 def main():
     """The program starts here"""
     pg.init()
@@ -109,17 +143,30 @@ def main():
 
     frame_clock = pg.time.Clock()
 
+    time = 0
+    num_teapots = 1
     # See what buttons are pressed this frame, and continue if we haven't quit.
     while process_events():
         # Tell Pygame we're on a new frame, with the given framerate
         # set it to zero to unlimit.
-        frame_clock.tick(60)
+        frame_clock.tick(FRAMERATE)
+        time += DELTA
+        # See what buttons are pressed this frame.
+        process_events()
 
         if key_pressed("A"):
-            print("Pressed the button")
+            num_teapots += 1
+
+        for i in range(num_teapots):
+            r = 100
+            a = i * 1 / 5 + time
+            x = math.cos(a) * r + SCREEN_WIDTH / 2
+            y = math.sin(a) * r + SCREEN_WIDTH / 2
+            draw_centered(teapot, (x, y), (0.5, 2.0), a * 180 / math.pi)
 
         # Update the display
         pg.display.flip()
+        clear_screen(pg.Color(0, 0, 0))
 
     pg.display.quit()
     pg.quit()
