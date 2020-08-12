@@ -5,6 +5,10 @@
 # The aim of this file is to give a collection of usable functions
 # and structures to be used as a jumping off point. Feel free
 # to change and distribute!
+#
+# Functions that start with an underscore, are probably not
+# interesting to read, they are functions that build other
+# more usable functions.
 
 import pygame as pg
 # For smaller cheat sheet see:
@@ -32,7 +36,8 @@ def quit_game():
 # Input handling
 #
 
-def event_is(event, kind):
+def _event_is(event: pg.event, kind: str) -> bool:
+    """Internal function to check the kind of pygame event"""
     return pg.event.event_name(event.type) == kind
 
 
@@ -43,22 +48,27 @@ def process_events():
     global last_frame_held_buttons
     last_frame_held_buttons = current_frame_held_buttons.copy()
     for event in pg.event.get():
-        if event_is(event, "Quit"):
+        if _event_is(event, "Quit"):
             quit_game()
-        elif event_is(event, "KeyDown"):
+        elif _event_is(event, "KeyDown"):
             current_frame_held_buttons.add(event.key)
-        elif event_is(event, "KeyUp"):
+        elif _event_is(event, "KeyUp"):
             current_frame_held_buttons.remove(event.key)
-        elif event_is(event, "MouseButtonUp"):
+        elif _event_is(event, "MouseButtonUp"):
             ...
-        elif event_is(event, "MouseButtonDown"):
+        elif _event_is(event, "MouseButtonDown"):
             ...
-        elif event_is(event, "MouseMotion"):
+        elif _event_is(event, "MouseMotion"):
             ...
 
 
-def to_keycode(key):
-    """Takes a keycode or a character and converts it to a keycode"""
+def _to_keycode(key):
+    """
+        Takes a keycode or a character and converts it to a keycode
+
+        A keycode is a number that uniquely identifies a keyboard key.
+        And a character is what you get when typing that key on the keyboard.
+    """
     if type(key) == str:
         if len(key) != 1:
             raise "error"
@@ -71,7 +81,7 @@ def key_down(key):
         Takes a key, that's either a keycode or a character,
         and says if it's down or not
     """
-    keycode = to_keycode(key)
+    keycode = _to_keycode(key)
     return keycode in current_frame_held_buttons
 
 
@@ -80,7 +90,7 @@ def key_released(key):
         Takes a key, that's either a keycode or a character,
         and says if it was released this frame.
     """
-    keycode = to_keycode(key)
+    keycode = _to_keycode(key)
     return (keycode not in current_frame_held_buttons) and \
            (keycode in last_frame_held_buttons)
 
@@ -90,13 +100,15 @@ def key_pressed(key):
         Takes a key, that's either a keycode or a character,
         and says if it was pressed down this frame.
     """
-    keycode = to_keycode(key)
+    keycode = _to_keycode(key)
     return (keycode in current_frame_held_buttons) and \
            (keycode not in last_frame_held_buttons)
 
 
 #
 # Main loop
+# Do your stuff here!
+# :D
 #
 
 SCREEN_WIDTH = 500
