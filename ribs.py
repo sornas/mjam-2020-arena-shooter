@@ -17,22 +17,6 @@ import pygame as pg
 #   https://www.pygame.org/docs/
 
 #
-# Utility
-#
-
-running = True
-def is_running():
-    """Is the game currently running?"""
-    return running
-
-
-def quit_game():
-    """Pull the brakes and stop the game!"""
-    global running
-    running = False
-
-
-#
 # Input handling
 #
 
@@ -45,11 +29,12 @@ current_frame_held_buttons = set()
 last_frame_held_buttons = None
 def process_events():
     """Tells the game what buttons are pressed."""
+    running = True
     global last_frame_held_buttons
     last_frame_held_buttons = current_frame_held_buttons.copy()
     for event in pg.event.get():
         if _event_is(event, "Quit"):
-            quit_game()
+            running = False
         elif _event_is(event, "KeyDown"):
             current_frame_held_buttons.add(event.key)
         elif _event_is(event, "KeyUp"):
@@ -60,6 +45,7 @@ def process_events():
             ...
         elif _event_is(event, "MouseMotion"):
             ...
+    return running
 
 
 def _to_keycode(key):
@@ -123,12 +109,11 @@ def main():
 
     frame_clock = pg.time.Clock()
 
-    while is_running():
+    # See what buttons are pressed this frame, and continue if we haven't quit.
+    while process_events():
         # Tell Pygame we're on a new frame, with the given framerate
         # set it to zero to unlimit.
         frame_clock.tick(60)
-        # See what buttons are pressed this frame.
-        process_events()
 
         if key_pressed("A"):
             print("Pressed the button")
