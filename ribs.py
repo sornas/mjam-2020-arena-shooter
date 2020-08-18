@@ -140,6 +140,9 @@ def main():
     """The program starts here"""
     pg.init()
     pg.display.init()
+    pg.mixer.init()
+
+    plong = pg.mixer.Sound("plong.wav")
 
     # Sets the screen resolution.
     pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -158,6 +161,7 @@ def main():
         process_events()
 
         if key_pressed("A"):
+            plong.play()
             num_teapots += 1
 
         for i in range(num_teapots):
@@ -171,6 +175,7 @@ def main():
         pg.display.flip()
         clear_screen(pg.Color(0, 0, 0))
 
+    pg.mixer.quit()
     pg.display.quit()
     pg.quit()
 
