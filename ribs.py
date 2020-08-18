@@ -16,8 +16,8 @@ import pygame as pg
 # For official pygame documentation see:
 #   https://www.pygame.org/docs/
 
+# math has sin, cos and other interesting things.
 import math
-# sin, cos and other interesting things.
 
 #
 # Input handling
@@ -98,8 +98,11 @@ def key_pressed(key):
 # Simple sprite drawing
 #
 
-def draw_centered(img, pos, scale=(1., 1.), degrees=0):
-    """Draw img around position, scale the image and then rotate it in degrees before drawing."""
+def draw_transformed(img, pos, scale=(1., 1.), degrees=0):
+    """
+        Draw img centered at position, scale the image and then rotate it in
+        degrees before drawing.
+    """
     if scale[0] != 1. or scale[1] != 1.:
         w, h = img.get_size()
         w = int(w * scale[0])
