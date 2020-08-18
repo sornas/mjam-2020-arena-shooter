@@ -165,7 +165,7 @@ def main():
             a = i * 1 / 5 + time
             x = math.cos(a) * r + SCREEN_WIDTH / 2
             y = math.sin(a) * r + SCREEN_WIDTH / 2
-            draw_centered(teapot, (x, y), (0.5, 2.0), a * 180 / math.pi)
+            draw_transformed(teapot, (x, y), (0.5, 2.0), a * 180 / math.pi)
 
         # Update the display
         pg.display.flip()
