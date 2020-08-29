@@ -130,7 +130,16 @@ def clear_screen(color):
 # :D
 #
 
-teapot = pg.image.load("teapot.png")
+# Asset dictionary for holding all your assets.
+assets = {}
+def init():
+    """ A function for loading all your assets,
+        this is since audio assets in particlular
+        can at their earliest be loaded here.
+    """
+    assets["teapot"] = pg.image.load("teapot.png")
+    assets["plong"] = pg.mixer.Sound("plong.wav")
+
 
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
@@ -142,7 +151,7 @@ def main():
     pg.display.init()
     pg.mixer.init()
 
-    plong = pg.mixer.Sound("plong.wav")
+    init()
 
     # Sets the screen resolution.
     pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -161,7 +170,7 @@ def main():
         process_events()
 
         if key_pressed("A"):
-            plong.play()
+            assets["plong"].play()
             num_teapots += 1
 
         for i in range(num_teapots):
@@ -169,7 +178,7 @@ def main():
             a = i * 1 / 5 + time
             x = math.cos(a) * r + SCREEN_WIDTH / 2
             y = math.sin(a) * r + SCREEN_WIDTH / 2
-            draw_transformed(teapot, (x, y), (0.5, 2.0), a * 180 / math.pi)
+            draw_transformed(assets["teapot"], (x, y), (0.5, 2.0), a * 180 / math.pi)
 
         # Update the display
         pg.display.flip()
