@@ -1,0 +1,47 @@
+body {
+    font-family: sans-serif;
+}
+
+.swatch {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid black;
+    vertical-align: text-bottom;
+}
+
+.func {
+}
+
+.func .title {
+    margin-bottom: 0.1em;
+}
+
+.docstr {
+    margin-top: 0.5em;
+}
+
+.docstr .header {
+    color: #EEE;
+    font-weight: 700;
+    padding: 0.1em;
+    padding-left: 0.5em;
+}
+
+.docstr .header, .docstr .content {
+    padding: 0.1em;
+    padding-left: 0.5em;
+}
+
+.Doc {
+    background-color: #267711;
+}
+
+.Ex {
+    background-color: #2e1177;
+}
+
+.docstr {
+    border-radius: 10px;
+    background-color: #EEE;
+}
