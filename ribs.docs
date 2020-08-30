@@ -19,8 +19,8 @@ This code would print "COWABUNGA" to the console when the "a" button is held.
 
 ## ex
 !--
-if key_down(" "):
-    print("JUMP")
+if key_down(pg.K_LEFT):
+    print("Move left")
 --!
-This code would print "JUMP" to the console when the spacebar is held.
+This code would print "Move left" to the console when the spacebar is held.
 

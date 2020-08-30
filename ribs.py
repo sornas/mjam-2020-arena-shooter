@@ -68,7 +68,7 @@ def _to_keycode(key):
 def key_down(key):
     """
         Takes a key, that's either a keycode or a character,
-        and says if it's down or not.
+        returns True if the corresponding key is pressed.
     """
     keycode = _to_keycode(key)
     return keycode in current_frame_held_buttons
@@ -169,7 +169,7 @@ def main():
         # See what buttons are pressed this frame.
         process_events()
 
-        if key_pressed("A"):
+        if key_pressed("A") or key_pressed(pg.K_LEFT):
             assets["plong"].play()
             num_teapots += 1
 
