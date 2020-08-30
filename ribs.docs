@@ -6,7 +6,7 @@ Also note that not everything is documented, if it's not
 documented you probably don't have to care about it.
 
 
-# key_down(key)
+# `key_down(key)`
 Takes a key, that's either a keycode or a character,
 and says if it's down or not.
 
