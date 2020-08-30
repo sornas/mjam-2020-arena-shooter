@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import pygments
 import pygments.lexers as lexers
 import pygments.formatters.html as formatters
+import re
 pygment_lexer = lexers.get_lexer_for_filename("what.py")
 pygment_format = formatters.HtmlFormatter()
 
@@ -55,6 +56,7 @@ def parse_docs(filename):
         doc = Docs()
         block = ""
         for line in f:
+            line = re.sub(r"`([^`]*)`", "<code>\g<1></code>", line)
             if line.startswith("# "):
                 if block:
                     doc.docs.append(block)
@@ -64,12 +66,10 @@ def parse_docs(filename):
                 doc = Docs()
                 doc.docs = []
                 doc.name = line[2:].strip()
-
             elif line.startswith("## ex"):
                 if block:
                     doc.docs.append(block)
                     block = ""
-
             else:
                 block += line
         if block:

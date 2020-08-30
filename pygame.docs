@@ -1,4 +1,4 @@
-# pg.Color(r, g, b)
+# `pg.Color(r, g, b)`
 
 Creates a new color with the given
 r=red, g=green, b=blue, a=opacity values.
@@ -6,9 +6,9 @@ r=red, g=green, b=blue, a=opacity values.
 255 -> Full, 0 -> None.
 
 ## ex
-So pg.Color(255, 0, 0) will give you really bright
+So `pg.Color(255, 0, 0)` will give you really bright
 red, since it's only red and it's at max value.
 
 ## ex
-So pg.Color(255, 255, 255) will give you bright white.
+So `pg.Color(255, 255, 255)` will give you bright white.
 (White is a mixture of all colors when working with displays.)
