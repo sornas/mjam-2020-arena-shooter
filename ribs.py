@@ -68,7 +68,7 @@ def _to_keycode(key):
 def key_down(key):
     """
         Takes a key, that's either a keycode or a character,
-        and says if it's down or not
+        and says if it's down or not.
     """
     keycode = _to_keycode(key)
     return keycode in current_frame_held_buttons

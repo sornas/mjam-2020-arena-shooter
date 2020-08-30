@@ -1,0 +1,26 @@
+# What is RIBS?
+A super small and easy to use collection of functions
+to help with some things pygame don't help with.
+
+Also note that not everything is documented, if it's not
+documented you probably don't have to care about it.
+
+
+# key_down(key)
+Takes a key, that's either a keycode or a character,
+and says if it's down or not.
+
+## ex
+!--
+if key_down("a"):
+    print("COWABUNGA")
+--!
+This code would print "COWABUNGA" to the console when the "a" button is held.
+
+## ex
+!--
+if key_down(" "):
+    print("JUMP")
+--!
+This code would print "JUMP" to the console when the spacebar is held.
+
