@@ -11,6 +11,19 @@ body {
 }
 
 .func {
+    margin-top: 1.0em;
+}
+
+.arg-block {
+    border-left: 2px solid #EAE;
+    padding-left: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.arg-name {
+    width: 5em;
+    display: inline-block;
 }
 
 .func .title {

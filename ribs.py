@@ -229,8 +229,8 @@ def main():
 
     frame_clock = pg.time.Clock()
 
-    rect_a = pg.Rect(10, 10, 100, 100)
-    vel_a = (0, 0)
+    rect_a = pg.Rect(200, 200, 100, 100)
+    vel_a = (0, 1000)
     rect_b = pg.Rect(250, 250, 50, 100)
     vel_b = (0, 0)
 
