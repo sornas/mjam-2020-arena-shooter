@@ -14,7 +14,7 @@ def gen_id(string):
     return string.split("(")[0].replace(".", "_")
 
 
-def gen_doc(name, docstrings):
+def gen_doc(name, id_name, docstrings):
     def format_doc(i, x):
         if i == 0:
             classname = "docstr explain"
@@ -37,7 +37,6 @@ def gen_doc(name, docstrings):
 
         return f"<div class='{classname}'><div class='header {prefix}'>{prefix}</div><div class='content'>" + x.replace('\n\n', '<br>') + "</div></div>"
 
-    id_name = gen_id(name)
     if docstrings:
         out = "".join([format_doc(i, x) for i, x in enumerate(docstrings)])
         return f"<div id='{id_name}' class='func'><h2 class='title'>{name}</h2>{out}</div>"
@@ -47,6 +46,7 @@ def gen_doc(name, docstrings):
 @dataclass
 class Docs:
     name: str = "NO NAME"
+    id_name: str = ""
     docs = None
 
 
@@ -66,6 +66,7 @@ def parse_docs(filename):
                 doc = Docs()
                 doc.docs = []
                 doc.name = line[2:].strip()
+                doc.id_name = gen_id(doc.name)
             elif line.startswith("## ex"):
                 if block:
                     doc.docs.append(block)
@@ -79,19 +80,32 @@ def parse_docs(filename):
         return res
 
 
+def gen_table_of_content(pg, sr):
+    html = "<div class='toc'><h1>Table of Contents</h1>"
+
+    html += "<div><h2>PyGame Helper</h2>"
+    html += "<br>".join(f"<a href='#{x.id_name}'>{x.name}</a>" for x in pg)
+    html += "</div>"
+
+    html += "<div><h2>Snake Ribs</h2>"
+    html += "<br>".join(f"<a href='#{x.id_name}'>{x.name}</a>" for x in sr)
+    html += "</div>"
+    return html
+
 style = open("style.css", "r").read()
 style += pygment_format.get_style_defs()
 pg_docs = parse_docs("pygame.docs")
 sr_docs = parse_docs("ribs.docs")
+
+toc = gen_table_of_content(pg_docs, sr_docs)
 with open("docs.html", "w+") as f:
     intro = "<h1>TODO INTRO</h1>"
-    toc = "<h1>TODO TOC</h1>"
     f.write("<!--- This file is auto generated, please do not edit -->")
     f.write(f"<html><head><title>Documentation</title><style>{style}</style></head><body>")
     f.write(intro)
     f.write(toc)
     f.write("<hr><div id='pygame'>")
-    f.write("".join([gen_doc(x.name, x.docs) for x in pg_docs]))
+    f.write("".join([gen_doc(x.name, x.id_name, x.docs) for x in pg_docs]))
     f.write("</div><hr><div id='lithekod'>")
-    f.write("".join([gen_doc(x.name, x.docs) for x in sr_docs]))
+    f.write("".join([gen_doc(x.name, x.id_name, x.docs) for x in sr_docs]))
     f.write("</body></html>")
