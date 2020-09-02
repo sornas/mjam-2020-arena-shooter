@@ -28,12 +28,19 @@ def gen_doc(name, id_name, docstrings):
             end_glyph = "--!"
             if not (start_glyph in x and end_glyph in x):
                 break
-            start = x.index(start_glyph)
-            end = x.index(end_glyph)
-            block = x[start+len(start_glyph):end]
-            formatted = highlight(block).strip()
-            x = x[:start] + formatted + x[end+len(end_glyph):]
-            print(x)
+            block_start = x.index(start_glyph)
+            cmd = x[block_start+len(start_glyph):x.index("\n", block_start)]
+            block_end = x.index(end_glyph)
+            block = x[block_start+len(start_glyph)+len(cmd):block_end]
+            if cmd == "code":
+                formatted = highlight(block).strip()
+                x = x[:block_start] + formatted + x[block_end+len(end_glyph):]
+            elif cmd == "params":
+                params = re.findall(r"\[(.*)\]\W*([^\[]*)", block)
+                params_prefix = "<table  class=\"args\">"
+                params = [f"<tr><td><code>{param.strip()}</code></td><td>{comment.strip()}</td></tr>" for param, comment in params]
+                params_suffix = "</table>"
+                x = x[:block_start] + params_prefix + "\n".join(params) + params_suffix + x[block_end+len(end_glyph):]
 
         return f"<div class='{classname}'><div class='header {prefix}'>{prefix}</div><div class='content'>" + x.replace('\n\n', '<br>') + "</div></div>"
 

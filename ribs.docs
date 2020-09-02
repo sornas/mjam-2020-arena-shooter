@@ -8,19 +8,20 @@ documented you probably don't have to care about it.
 # `key_down(key)`
 Takes a key, that's either a keycode or a character,
 and says if it's down or not.
-<div class="arg-block">
-<div class="arg-name">`key`</div> - Is a string with the character or a keycode (pg.K_****) of the button to check.<br>
-</div>
+
+!--params
+[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+--!
 
 ## ex
-!--
+!--code
 if key_down("a"):
     print("COWABUNGA")
 --!
 This code would print "COWABUNGA" to the console when the "a" button is held.
 
 ## ex
-!--
+!--code
 if key_down(pg.K_LEFT):
     print("Move left")
 --!
@@ -29,12 +30,12 @@ This code would print "Move left" to the console when the spacebar is held.
 # `key_released(key)`
 Takes a key, that's either a keycode or a character,
 and says if it was released this frame.
-<div class="arg-block">
-<div class="arg-name">`key`</div>- Is a string with the character or a keycode (pg.K_****) of the button to check.<br>
-</div>
+!--params
+[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+--!
 
 ## ex
-!--
+!--code
 if key_released("a"):
     print("hold longer maybe?")
 --!
@@ -43,12 +44,12 @@ This code would print "hold longer maybe?" to the console when the "a" button wa
 # `key_pressed(key)`
 Takes a key, that's either a keycode or a character,
 and says if it was pressed down this frame.
-<div class="arg-block">
-<div class="arg-name">`key`</div>- Is a string with the character or a keycode (pg.K_****) of the button to check.<br>
-</div>
+!--params
+[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+--!
 
 ## ex
-!--
+!--code
 if key_down(pg.K_SPACE):
     print("JUMP")
 --!
@@ -58,16 +59,15 @@ This code would print "JUMP" to the console when the spacebar is pressed, and on
 Draws a sprite centered around `position` scaled by `scale` and
 rotated clockwise `degrees`. This function is just a convenience function to
 make it simpler to draw sprites.
-<div class="arg-block">
-<div class="arg-name">`img`</div> - Is the image to be used as a sprite.<br>
-<div class="arg-name">`position`</div> - Is the center position of the sprite.<br>
-<div class="arg-name">`scale`</div> - If you want to apply a scale factor to the sprite.
-         (You don't need to supply this argument.)<br>
-<div class="arg-name">`degrees`</div> - If you want to rotate the sprite. (You don't need to supply this argument.)<br>
-</div>
+!--params
+[img] The image to be used as a sprite.
+[position] The center position of the sprite.
+[scale] A scale factor to apply. (Optional)
+[degrees] Rotate the sprite. (Optional)
+--!
 
 ## ex
-!--
+!--code
 assets["teapot"] = pg.image.load("teapot.png")
 draw_transformed(assets["teapot"], (100, 100))
 --!
@@ -76,7 +76,7 @@ pixels to the right of the left edge, and 100 pixels below the top edge of the
 window.
 
 ## ex
-!--
+!--code
 assets["teapot"] = pg.image.load("teapot.png")
 draw_transformed(assets["teapot"], (100, 100), (1, 0.5), time)
 --!
@@ -92,13 +92,13 @@ If the depth is negative it means they are far away from overlapping.
 Note that this function is not super important, you probably want
 to use `solve_rect_overlap(a, b)`
 
-<div class="arg-block">
-<div class="arg-name">`a`</div>- A `pg.Rect(minx, miny, width, height)`.<br>
-<div class="arg-name">`b`</div> - A `pg.Rect(minx, miny, width, height)`. (Same as `a`)<br>
-</div>
+!--params
+[a] A `pg.Rect(minx, miny, width, height)`.
+[b] A `pg.Rect(minx, miny, width, height)`.
+--!
 
 ## ex
-!--
+!--code
 rect_a = pg.Rect(200, 200, 100, 100)
 rect_b = pg.Rect(250, 250, 50, 100)
 normal, depth = overlap_data(rect_a, rect_b)
@@ -113,20 +113,20 @@ This function checks if `a` and `b` overlap, if they do the collision
 is solved and two new rectangles moved out of eachother along the shortest
 collision vector are returned along with their velocities.
 
-<div class="arg-block">
-<div class="arg-name">`a`     </div> - A `pg.Rect(minx, miny, width, height)`.<br>
-<div class="arg-name">`b`     </div> - A `pg.Rect(minx, miny, width, height)`. (Same as `a`)<br>
-<div class="arg-name">`vel_a` </div> - The velocity `a` has, given as a tuple.<br>
-<div class="arg-name">`vel_b` </div> - The velocity `b` has, given as a tuple.<br>
-<div class="arg-name">`mass_a`</div> - The mass of `a`, 0 mass means it's static and imovable.<br>
-<div class="arg-name">`mass_b`</div> - The mass of `b`, 0 mass means it's static and imovable.<br>
-<div class="arg-name">`bounce`</div> - How bouncy the collision should be. Values higher than 1 will introduce
-           more energy to the system and might cause glitches. Values lower than 0
-           does not make sense.<br>
-</div>
+!--params
+[a] A `pg.Rect(minx, miny, width, height)`.
+[b] A `pg.Rect(minx, miny, width, height)`.
+[vel_a] The velocity of `a`, given as a tuple.
+[vel_b] The velocity of `b`, given as a tuple.
+[mass_a] The mass of `a`. 0 mass means it's static and immovable.
+[mass_b] The mass of `b`. 0 mass means it's static and immovable.
+[bounce] How bouncy the collision should be. Values higher than 1
+         will introduce more energy into the system and might
+         cause glitches. Values lower than 0 don't make sense.
+--!
 
 ## ex
-!--
+!--code
 rect_a = pg.Rect(200, 200, 100, 100)
 vel_a = (0, 1000)
 rect_b = pg.Rect(250, 250, 50, 100)

@@ -14,16 +14,16 @@ body {
     margin-top: 1.0em;
 }
 
-.arg-block {
+.args {
     border-left: 2px solid #EAE;
     padding-left: 1em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
 
-.arg-name {
-    width: 5em;
-    display: inline-block;
+.args td {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 .func .title {
