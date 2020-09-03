@@ -38,7 +38,7 @@ and says if it was released this frame.
 if key_released("a"):
     print("hold longer maybe?")
 --!
-this code would print "hold longer maybe?" to the console when the "a" button was released.
+This code would print "hold longer maybe?" to the console when the "a" button was released.
 
 # `key_pressed(key)`
 Takes a key, that's either a keycode or a character,
@@ -55,8 +55,8 @@ if key_down(pg.K_SPACE):
 This code would print "JUMP" to the console when the spacebar is pressed, and only that frame.
 
 # `draw_transformed(img, position, scale=(1., 1.), degrees=0)`
-Draws a sprite in a sprite centered around `position` scaled by `scale` and
-rotated clockwise `degrees`. This function is just a convinience function to
+Draws a sprite centered around `position` scaled by `scale` and
+rotated clockwise `degrees`. This function is just a convenience function to
 make it simpler to draw sprites.
 <div class="arg-block">
 <div class="arg-name">`img`</div> - Is the image to be used as a sprite.<br>
@@ -72,7 +72,7 @@ assets["teapot"] = pg.image.load("teapot.png")
 draw_transformed(assets["teapot"], (100, 100))
 --!
 This code would draw the "teapot.png" image (given that you have one) 100
-pixels to the right of the left edge, and 100 pixels bellow the top edge of the
+pixels to the right of the left edge, and 100 pixels below the top edge of the
 window.
 
 ## ex
@@ -82,11 +82,11 @@ draw_transformed(assets["teapot"], (100, 100), (1, 0.5), time)
 --!
 This code would draw the "teapot.png" image (given that you have one),
 and given that `time` was the "time since the program started", this
-would draw a sprite at (100, 100) shrunk to half long the y axis, rotating
+would draw a sprite at (100, 100) shrunk to half size along the y axis, rotating
 around it's center.
 
 # `overlap_data(a, b)`
-Returns the exis that points from a to b, and the depth of the collision.
+Returns the axis that points from a to b, and the depth of the collision.
 If the depth is negative it means they are far away from overlapping.
 
 Note that this function is not super important, you probably want
@@ -134,4 +134,4 @@ vel_b = (0, 0)
 rect_a, rect_b, vel_a, vel_b, hit = solve_rect_overlap(rect_a, rect_b, vel_a, vel_b, bounce=1.0)
 --!
 This code will create a collision between `rect_a` and `rect_b`. The collision will send
-rect_b flying since all the energy from `rect _a` is transfered to `rect_b`.
+rect_b flying since all the energy from `rect _a` is transferred to `rect_b`.
