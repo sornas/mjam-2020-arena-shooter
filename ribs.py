@@ -202,14 +202,24 @@ def damping(vel, damp=0.1):
 
 #
 # Main loop
-# Do your stuff here!
-# :D
+# (with global state needed for code to work)
 #
 
 
+UPDATE_FUNC = None
+UPDATE_ITER = None
+
+FRAMERATE = 60
+DELTA = 1 / FRAMERATE
+TIME = 0
+FRAME_CLOCK = pg.time.Clock()
+
 PYGAME_INITALIZED = False
+
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
+
+
 def set_screen_size(width, height):
     """Sets the screen size of the game to width and height passed in."""
     global SCREEN_WIDTH, SCREEN_HEIGHT, PYGAME_INITALIZED
@@ -219,9 +229,6 @@ def set_screen_size(width, height):
         pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
-FRAMERATE = 60
-DELTA = 1 / FRAMERATE
-TIME = 0
 def set_frame_rate(fps):
     """Sets the framerate of the game to the given FPS."""
     global FRAMERATE, DELTA
@@ -235,11 +242,13 @@ def time():
 
 def delta():
     """Return the time passed from the previous frame to this frame."""
-    return DELTA
+    if FPS:
+        return DELTA
+    # I know this looks wierd, but "get_time" returns the "delta",
+    # really wierd.
+    return FRAME_CLOCK.get_time() / 1000.0
 
 
-UPDATE_FUNC = None
-UPDATE_ITER = None
 def restart():
     """Reruns the initalization code of the game"""
     global UPDATE_FUNC, UPDATE_ITER, TIME
@@ -256,13 +265,14 @@ def start_game(init, update):
     global PYGAME_INITALIZED
     PYGAME_INITALIZED = True
 
+    global FRAME_CLOCK
+    FRAME_CLOCK = pg.time.Clock()
+
     # Let you do initalization
     init()
 
     # Sets the screen resolution.
     set_screen_size(SCREEN_WIDTH, SCREEN_HEIGHT)
-
-    frame_clock = pg.time.Clock()
 
     global UPDATE_FUNC, TIME
     UPDATE_FUNC = update
@@ -273,7 +283,7 @@ def start_game(init, update):
     while process_events():
         # Tell Pygame we're on a new frame, with the given framerate
         # set it to zero to unlimit.
-        frame_clock.tick(FRAMERATE)
+        FRAME_CLOCK.tick(FRAMERATE)
         TIME += DELTA
         # See what buttons are pressed this frame.
         process_events()
