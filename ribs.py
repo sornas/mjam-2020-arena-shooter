@@ -9,6 +9,11 @@
 # Functions that start with an underscore, are probably not
 # interesting to read, they are functions that build other
 # more usable functions.
+#
+# Then again, the implementations in this file are not nessecary
+# for understanding how to use them. There's some nice documentation
+# if you'd rather read that! :D
+#
 
 import pygame as pg
 # For smaller cheat sheet see:
