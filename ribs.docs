@@ -5,22 +5,133 @@ to help with some things pygame don't help with.
 Also note that not everything is documented, if it's not
 documented you probably don't have to care about it.
 
-
 # `key_down(key)`
 Takes a key, that's either a keycode or a character,
 and says if it's down or not.
 
+!--params
+[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+--!
+
 ## ex
-!--
+!--code
 if key_down("a"):
     print("COWABUNGA")
 --!
 This code would print "COWABUNGA" to the console when the "a" button is held.
 
 ## ex
-!--
+!--code
 if key_down(pg.K_LEFT):
     print("Move left")
 --!
 This code would print "Move left" to the console when the spacebar is held.
 
+# `key_released(key)`
+Takes a key, that's either a keycode or a character,
+and says if it was released this frame.
+!--params
+[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+--!
+
+## ex
+!--code
+if key_released("a"):
+    print("hold longer maybe?")
+--!
+This code would print "hold longer maybe?" to the console when the "a" button was released.
+
+# `key_pressed(key)`
+Takes a key, that's either a keycode or a character,
+and says if it was pressed down this frame.
+!--params
+[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+--!
+
+## ex
+!--code
+if key_down(pg.K_SPACE):
+    print("JUMP")
+--!
+This code would print "JUMP" to the console when the spacebar is pressed, and only that frame.
+
+# `draw_transformed(img, position, scale=(1., 1.), degrees=0)`
+Draws a sprite centered around `position` scaled by `scale` and
+rotated clockwise `degrees`. This function is just a convenience function to
+make it simpler to draw sprites.
+!--params
+[img] The image to be used as a sprite.
+[position] The center position of the sprite.
+[scale] A scale factor to apply. (Optional)
+[degrees] Rotate the sprite. (Optional)
+--!
+
+## ex
+!--code
+assets["teapot"] = pg.image.load("teapot.png")
+draw_transformed(assets["teapot"], (100, 100))
+--!
+This code would draw the "teapot.png" image (given that you have one) 100
+pixels to the right of the left edge, and 100 pixels below the top edge of the
+window.
+
+## ex
+!--code
+assets["teapot"] = pg.image.load("teapot.png")
+draw_transformed(assets["teapot"], (100, 100), (1, 0.5), time)
+--!
+This code would draw the "teapot.png" image (given that you have one),
+and given that `time` was the "time since the program started", this
+would draw a sprite at (100, 100) shrunk to half size along the y axis, rotating
+around it's center.
+
+# `overlap_data(a, b)`
+Returns the axis that points from a to b, and the depth of the collision.
+If the depth is negative it means they are far away from overlapping.
+
+Note that this function is not super important, you probably want
+to use `solve_rect_overlap(a, b)`
+
+!--params
+[a] A `pg.Rect(minx, miny, width, height)`.
+[b] A `pg.Rect(minx, miny, width, height)`.
+--!
+
+## ex
+!--code
+rect_a = pg.Rect(200, 200, 100, 100)
+rect_b = pg.Rect(250, 250, 50, 100)
+normal, depth = overlap_data(rect_a, rect_b)
+overlap = depth > 0
+print(overlap)
+--!
+This code would print "True" since the rectangles overlap, and thus
+the depth of their overlap is positive.
+
+# `solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bounce=0)`
+This function checks if `a` and `b` overlap, if they do the collision
+is solved and two new rectangles moved out of eachother along the shortest
+collision vector are returned along with their velocities.
+
+!--params
+[a] A `pg.Rect(minx, miny, width, height)`.
+[b] A `pg.Rect(minx, miny, width, height)`.
+[vel_a] The velocity of `a`, given as a tuple.
+[vel_b] The velocity of `b`, given as a tuple.
+[mass_a] The mass of `a`. 0 mass means it's static and immovable.
+[mass_b] The mass of `b`. 0 mass means it's static and immovable.
+[bounce] How bouncy the collision should be. Values higher than 1
+         will introduce more energy into the system and might
+         cause glitches. Values lower than 0 don't make sense.
+--!
+
+## ex
+!--code
+rect_a = pg.Rect(200, 200, 100, 100)
+vel_a = (0, 1000)
+rect_b = pg.Rect(250, 250, 50, 100)
+vel_b = (0, 0)
+rect_a, rect_b, vel_a, vel_b, hit = solve_rect_overlap(rect_a, rect_b, vel_a, vel_b, bounce=1.0)
+--!
+This code will create a collision between `rect_a` and `rect_b`. The collision will send
+rect_b flying since all the energy from `rect _a` is transferred to `rect_b`.
