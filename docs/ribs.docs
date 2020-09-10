@@ -135,3 +135,87 @@ rect_a, rect_b, vel_a, vel_b, hit = solve_rect_overlap(rect_a, rect_b, vel_a, ve
 --!
 This code will create a collision between `rect_a` and `rect_b`. The collision will send
 rect_b flying since all the energy from `rect _a` is transferred to `rect_b`.
+
+# `set_screen_size(width, height)`
+Sets new dimensions for the screen that renderes the game.
+!--params
+[width]  The new width of the screen in pixels.
+[height] The new height of the screen in pixels.
+--!
+
+## ex
+!--code
+set_screen_size(1337, 420)
+--!
+This line of code would set the windows dimensions to 1337 pixels wide and 420
+pixels high.
+
+# `set_frame_rate(fps)`
+Updates the framerate limit to the supplied FPS, if set to 0 there will be no limit.
+!--params
+[fps] The framerate to limit to, 0 means no limit.
+--!
+
+## ex
+!--code
+set_frame_rate(0)
+--!
+This line of code would unlimit the framerate.
+
+## ex
+!--code
+set_frame_rate(60)
+--!
+This line of code would limit the framerate to 60 frames per second.
+
+# `time()`
+Return the number of seconds passed since the start of the game, or the latest restart.
+
+# `delta()`
+Return the number of seconds passed between this frame and the previous,
+the number is usually quite small (~0.16).
+
+# `restart()`
+Restarts the game, resets all the state from the engine side of things.
+Note that it might not clear your stored state, which might cause the game
+to behave strangely when restarting.
+
+Note that calling `restart()` won't terminate the "run".
+
+# `start_game(init, update)`
+The code that calls into the `ribs.py` and sets up everything that needs to be
+set up. You just give in your function.
+
+If you're using the supplied template, you don't need to worry about this.
+
+!--params
+[init] The initalization function, this one is only called once. Takes no arguments.
+[update] The update function, expected to be an itterator that returns when the game
+          is finished. Takes no arguments.
+--!
+
+## ex
+!--code
+def init():
+    print("Initalzed, only called once!")
+
+def update():
+    print("I'm called for every start and restart!")
+    while True:
+        print("Update!")
+        yield
+
+start_game(init, update)
+--!
+This code would create a game that prints the following:
+
+<pre>
+Initalzed, only called once!
+I'm called for every start and restart!
+Update!
+Update!
+Update!
+.
+.
+.
+</pre>
