@@ -15,11 +15,13 @@ def update():
     """The program starts here"""
     num_teapots = 1
 
+    # Initialization (only runs on start/restart)
     rect_a = pg.Rect(200, 200, 100, 100)
     vel_a = (0, 1000)
     rect_b = pg.Rect(250, 250, 50, 100)
     vel_b = (0, 0)
 
+    # Main update loop
     while True:
         if key_pressed("A") or key_pressed(pg.K_LEFT):
             assets["plong"].play()
@@ -55,6 +57,7 @@ def update():
         else:
             pg.draw.rect(window, pg.Color(200, 0, 255), rect_b)
 
+        # Main loop ends here, put your code above this line
         yield
 
 

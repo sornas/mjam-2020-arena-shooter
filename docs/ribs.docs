@@ -137,7 +137,7 @@ This code will create a collision between `rect_a` and `rect_b`. The collision w
 rect_b flying since all the energy from `rect _a` is transferred to `rect_b`.
 
 # `set_screen_size(width, height)`
-Sets new dimensions for the screen that renderes the game.
+Sets new dimensions for the screen that renders the game.
 !--params
 [width]  The new width of the screen in pixels.
 [height] The new height of the screen in pixels.
@@ -147,36 +147,36 @@ Sets new dimensions for the screen that renderes the game.
 !--code
 set_screen_size(1337, 420)
 --!
-This line of code would set the windows dimensions to 1337 pixels wide and 420
+This line of code would set the window's dimensions to 1337 pixels wide and 420
 pixels high.
 
 # `set_frame_rate(fps)`
-Updates the framerate limit to the supplied FPS, if set to 0 there will be no limit.
+Updates the frame rate limit to the supplied FPS, if set to 0 there will be no limit.
 !--params
-[fps] The framerate to limit to, 0 means no limit.
+[fps] The frame rate to limit to, 0 means no limit.
 --!
 
 ## ex
 !--code
 set_frame_rate(0)
 --!
-This line of code would unlimit the framerate.
+This line of code would unlimit the frame rate.
 
 ## ex
 !--code
 set_frame_rate(60)
 --!
-This line of code would limit the framerate to 60 frames per second.
+This line of code would limit the frame rate to 60 frames per second.
 
 # `time()`
 Return the number of seconds passed since the start of the game, or the latest restart.
 
 # `delta()`
-Return the number of seconds passed between this frame and the previous,
-the number is usually quite small (~0.16).
+Return the number of seconds passed between this frame and the previous.
+The number is usually quite small (~0.16).
 
 # `restart()`
-Restarts the game, resets all the state from the engine side of things.
+Restart the game and reset all state from the engine's side of things.
 Note that it might not clear your stored state, which might cause the game
 to behave strangely when restarting.
 
@@ -190,14 +190,14 @@ If you're using the supplied template, you don't need to worry about this.
 
 !--params
 [init] The initalization function, this one is only called once. Takes no arguments.
-[update] The update function, expected to be an itterator that returns when the game
+[update] The update function, expected to be an iterator that returns when the game
           is finished. Takes no arguments.
 --!
 
 ## ex
 !--code
 def init():
-    print("Initalzed, only called once!")
+    print("Initialized, only called once!")
 
 def update():
     print("I'm called for every start and restart!")
@@ -210,7 +210,7 @@ start_game(init, update)
 This code would create a game that prints the following:
 
 <pre>
-Initalzed, only called once!
+Initialized, only called once!
 I'm called for every start and restart!
 Update!
 Update!
