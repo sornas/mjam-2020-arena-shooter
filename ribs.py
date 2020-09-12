@@ -237,7 +237,7 @@ def time():
 
 def delta():
     """Return the time passed from the previous frame to this frame."""
-    if FPS:
+    if FRAMERATE:
         return DELTA
     # I know this looks wierd, but "get_time" returns the "delta",
     # really wierd.
