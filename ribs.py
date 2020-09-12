@@ -177,7 +177,7 @@ def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bou
         a.centerx = int(a.centerx + normal[0] * depth * effect_a)
         a.centery = int(a.centery + normal[1] * depth * effect_a)
 
-        effect_b = mass_a / total_mass
+        effect_b = mass_b / total_mass
         b.centerx = int(b.centerx - normal[0] * depth * effect_b)
         b.centery = int(b.centery - normal[1] * depth * effect_b)
 
