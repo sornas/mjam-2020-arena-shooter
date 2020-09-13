@@ -9,6 +9,11 @@
 # Functions that start with an underscore, are probably not
 # interesting to read, they are functions that build other
 # more usable functions.
+#
+# Then again, the implementations in this file are not nessecary
+# for understanding how to use them. There's some nice documentation
+# if you'd rather read that! :D
+#
 
 import pygame as pg
 # For smaller cheat sheet see:
@@ -197,86 +202,97 @@ def damping(vel, damp=0.1):
 
 #
 # Main loop
-# Do your stuff here!
-# :D
+# (with global state needed for code to work)
 #
 
-# Asset dictionary for holding all your assets.
-assets = {}
-def init():
-    """ A function for loading all your assets,
-        this is since audio assets in particlular
-        can at their earliest be loaded here.
-    """
-    assets["teapot"] = pg.image.load("teapot.png")
-    assets["plong"] = pg.mixer.Sound("plong.wav")
 
+UPDATE_FUNC = None
+UPDATE_ITER = None
+
+FRAMERATE = 60
+DELTA = 1 / FRAMERATE
+TIME = 0
+FRAME_CLOCK = pg.time.Clock()
+
+PYGAME_INITALIZED = False
 
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
-FRAMERATE = 60
-DELTA = 1 / FRAMERATE
-def main():
+
+
+def set_screen_size(width, height):
+    """Sets the screen size of the game to width and height passed in."""
+    global SCREEN_WIDTH, SCREEN_HEIGHT, PYGAME_INITALIZED
+    SCREEN_WIDTH = width
+    SCREEN_HEIGHT = height
+    if PYGAME_INITALIZED:
+        pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+
+def set_frame_rate(fps):
+    """Sets the framerate of the game to the given FPS."""
+    global FRAMERATE, DELTA
+    FRAMERATE = fps
+    DELTA = 1 / FRAMERATE
+
+def time():
+    """Return the time since the program started."""
+    return TIME
+
+
+def delta():
+    """Return the time passed from the previous frame to this frame."""
+    if FPS:
+        return DELTA
+    # I know this looks wierd, but "get_time" returns the "delta",
+    # really wierd.
+    return FRAME_CLOCK.get_time() / 1000.0
+
+
+def restart():
+    """Reruns the initalization code of the game"""
+    global UPDATE_FUNC, UPDATE_ITER, TIME
+    UPDATE_ITER = UPDATE_FUNC()
+    TIME = 0
+
+
+def start_game(init, update):
     """The program starts here"""
     pg.init()
     pg.display.init()
     pg.mixer.init()
 
+    global PYGAME_INITALIZED
+    PYGAME_INITALIZED = True
+
+    global FRAME_CLOCK
+    FRAME_CLOCK = pg.time.Clock()
+
+    # Let you do initalization
     init()
 
     # Sets the screen resolution.
-    pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    set_screen_size(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    frame_clock = pg.time.Clock()
+    global UPDATE_FUNC, TIME
+    UPDATE_FUNC = update
+    # First start is a restart.
+    restart()
 
-    rect_a = pg.Rect(200, 200, 100, 100)
-    vel_a = (0, 1000)
-    rect_b = pg.Rect(250, 250, 50, 100)
-    vel_b = (0, 0)
-
-    time = 0
-    num_teapots = 1
     # See what buttons are pressed this frame, and continue if we haven't quit.
     while process_events():
         # Tell Pygame we're on a new frame, with the given framerate
         # set it to zero to unlimit.
-        frame_clock.tick(FRAMERATE)
-        time += DELTA
+        FRAME_CLOCK.tick(FRAMERATE)
+        TIME += DELTA
         # See what buttons are pressed this frame.
         process_events()
 
-        if key_pressed("A") or key_pressed(pg.K_LEFT):
-            assets["plong"].play()
-            num_teapots += 1
-
-        for i in range(num_teapots):
-            r = 100
-            a = i * 1 / 5 + time
-            x = math.cos(a) * r + SCREEN_WIDTH / 2
-            y = math.sin(a) * r + SCREEN_WIDTH / 2
-            draw_transformed(assets["teapot"], (x, y), (0.5, 2.0), a * 180 / math.pi)
-
-        if pg.mouse.get_pressed()[0]:
-            vel_a = ((rect_a.centerx - pg.mouse.get_pos()[0]) / -DELTA,
-                     (rect_a.centery - pg.mouse.get_pos()[1]) / -DELTA)
-            rect_a.center = pg.mouse.get_pos()
-        rect_a, rect_b, vel_a, vel_b, hit = solve_rect_overlap(rect_a, rect_b, vel_a, vel_b, bounce=1.0)
-
-        print(vel_a, vel_b)
-        vel_b = damping(vel_b, 0.1)
-        rect_b.x += int(vel_b[0] * DELTA)
-        rect_b.y += int(vel_b[1] * DELTA)
-
-        if not pg.mouse.get_pressed()[0]:
-            rect_a.x += int(vel_a[0] * DELTA)
-            rect_a.y += int(vel_a[1] * DELTA)
-
-        window = pg.display.get_surface()
-        pg.draw.rect(window, pg.Color(255, 200, 200), rect_a)
-        if hit:
-            pg.draw.rect(window, pg.Color(200, 255, 255), rect_b)
-        else:
-            pg.draw.rect(window, pg.Color(200, 0, 255), rect_b)
+        # Let you do what you need to do.
+        try:
+            next(UPDATE_ITER)
+        except StopIteration:
+            break
 
         # Update the display
         pg.display.flip()
@@ -286,6 +302,3 @@ def main():
     pg.display.quit()
     pg.quit()
 
-# This has to be at the bottom, because of python reasons.
-if __name__ == "__main__":
-    main()
