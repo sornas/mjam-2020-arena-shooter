@@ -35,7 +35,6 @@ def update_player(player, delta):
     max_speed = player.max_walk_speed
     clamped_horizontal_speed = max(min(player.velocity[0], max_speed), -max_speed)
     player.velocity = (clamped_horizontal_speed, player.velocity[1])
-    print(f"{float(player.velocity[0]):.3}")
 
     player.centerx += player.velocity[0] * delta
     player.centery += player.velocity[1] * delta
@@ -65,6 +64,14 @@ levels = [
 ####   E #
 ##########
 """,
+"""
+##########
+#      S #
+####     #
+##       #
+##E      #
+##########
+""",
 ]
 
 def parse_level(level_string):
@@ -89,7 +96,6 @@ def parse_level(level_string):
             elif c == "S":
                 # It's the start
                 start = (x, y)
-                print(start)
 
     return walls, goals, start
 
@@ -105,12 +111,14 @@ def init():
     assets["plong"] = pg.mixer.Sound("plong.wav")
 
 
+current_level = 0
 def update():
+    global current_level
     """The program starts here"""
     # Initialization (only runs on start/restart)
     player = Player()
 
-    walls, goals, start = parse_level(levels[1])
+    walls, goals, start = parse_level(levels[current_level])
     player.centerx = start[0]
     player.centery = start[1]
 
@@ -132,7 +140,8 @@ def update():
 
             _, depth = overlap_data(player, goal)
             if depth > 0:
-                print("GOAL!")
+                current_level = (current_level + 1) % len(levels)
+                restart()
 
 
         # Main loop ends here, put your code above this line
