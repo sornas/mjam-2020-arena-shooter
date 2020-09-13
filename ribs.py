@@ -154,7 +154,7 @@ def overlap_data(a, b):
     return normal, depth
 
 
-def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bounce=0):
+def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bounce=1):
     """
         Solves the collision between a and b, with the mass and velocity as specified.
         A solved collision has no overlap and velocities that do not point into eachother.
@@ -174,12 +174,12 @@ def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bou
     total_mass = mass_a + mass_b
     if total_mass != 0:
         effect_a = mass_a / total_mass
-        a.centerx = int(a.centerx + normal[0] * depth * effect_a)
-        a.centery = int(a.centery + normal[1] * depth * effect_a)
+        a.centerx = a.centerx + normal[0] * depth * effect_a
+        a.centery = a.centery + normal[1] * depth * effect_a
 
         effect_b = mass_b / total_mass
-        b.centerx = int(b.centerx - normal[0] * depth * effect_b)
-        b.centery = int(b.centery - normal[1] * depth * effect_b)
+        b.centerx = b.centerx - normal[0] * depth * effect_b
+        b.centery = b.centery - normal[1] * depth * effect_b
 
     # Velocity correction
     relative_v = (1 + bounce) * (dot(vel_a, normal) - dot(vel_b, normal))
