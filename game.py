@@ -131,7 +131,7 @@ def update():
             window = pg.display.get_surface()
             pg.draw.rect(window, pg.Color(100, 100, 100), wall)
 
-            solution = solve_rect_overlap(player, wall, player.velocity, mass_b=0)
+            solution = solve_rect_overlap(player, wall, player.velocity, mass_b=0, bounce=0.1)
             player.velocity = solution[2]
 
         for goal in goals:
