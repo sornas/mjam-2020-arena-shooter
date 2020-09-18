@@ -46,13 +46,8 @@ def process_events():
         elif _event_is(event, "KeyDown"):
             current_frame_held_buttons.add(event.key)
         elif _event_is(event, "KeyUp"):
-            current_frame_held_buttons.remove(event.key)
-        elif _event_is(event, "MouseButtonUp"):
-            ...
-        elif _event_is(event, "MouseButtonDown"):
-            ...
-        elif _event_is(event, "MouseMotion"):
-            ...
+            if event.key in current_frame_held_buttons:
+                current_frame_held_buttons.remove(event.key)
     return running
 
 
