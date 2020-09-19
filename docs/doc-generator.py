@@ -105,7 +105,7 @@ pg_docs = parse_docs("pygame.docs")
 sr_docs = parse_docs("ribs.docs")
 
 toc = gen_table_of_content(pg_docs, sr_docs)
-with open("docs.html", "w+") as f:
+with open("index.html", "w+") as f:
     intro = "<h1>TODO INTRO</h1>"
     f.write("<!--- This file is auto generated, please do not edit -->")
     f.write(f"<html><head><title>Documentation</title><style>{style}</style></head><body>")

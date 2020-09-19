@@ -12,10 +12,6 @@ First off, clone the repository and `cd` into it.
 # With HTTPS
 git clone https://github.com/lithekod/snake-ribs.git
 cd snake-ribs
-
-# Or with ssh
-git clone git@github.com:lithekod/snake-ribs.git
-cd snake-ribs
 ```
 
 Running snake-ribs requires pygame, which can be installed using the following
@@ -25,10 +21,18 @@ command.
 pip install -r requirements.txt
 ```
 
-With pygame installed, run the game with:
+## Documentation
+
+The documentation for RIBS can be found at [tbd]
+
+## Running the game
+
+RIBS comes with a sample game which you can modify to make it your own. To run it,
+simply call
 
 ```bash
 python3 game.py
 ```
 
-Now you are ready to create your game!
+To modify the game, open game.py and make your own changes.
+
