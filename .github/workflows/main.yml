@@ -16,9 +16,10 @@ jobs:
             python-version: '3.7'
       - name: Python Version
         run: python --version
+      - name: Move to docs
+        run: cd docs
       - name: Gen dummy page
         run: |
-          cd docs
           pip install pygments
           python doc-generator.py
       - name: Deploy to GitHub Pages
@@ -30,5 +31,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Zip release files
-        run: |
-            zip docs/ribs.zip *.py
+        run: zip ribs.zip ../*.py
