@@ -9,19 +9,19 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+            python-version: '3.7'
       - name: Python Version
-        run: python3 --version
-      -
-        name: Gen dummy page
+        run: python --version
+      - name: Gen dummy page
         run: |
           cd docs
           pip install pygments
-          python3 doc-generator.py
-      -
-        name: Deploy to GitHub Pages
+          python doc-generator.py
+      - name: Deploy to GitHub Pages
         if: success()
         uses: crazy-max/ghaction-github-pages@v2
         with:
