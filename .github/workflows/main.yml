@@ -29,3 +29,6 @@ jobs:
           build_dir: docs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Zip release files
+        run: |
+            zip docs/ribs.zip *.zip
