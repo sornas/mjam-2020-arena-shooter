@@ -31,4 +31,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Zip release files
         run: |
-            zip docs/ribs.zip *.zip
+            zip docs/ribs.zip *.py
