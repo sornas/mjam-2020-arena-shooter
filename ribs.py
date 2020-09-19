@@ -154,7 +154,7 @@ def overlap_data(a, b):
     return normal, depth
 
 
-def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bounce=0):
+def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bounce=1):
     """
         Solves the collision between a and b, with the mass and velocity as specified.
         A solved collision has no overlap and velocities that do not point into eachother.
@@ -168,18 +168,18 @@ def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bou
     scale = lambda v, s: (v[0] * s, v[1] * s)
 
     normal, depth = overlap_data(a, b)
-    if depth < 0: return a, b, vel_a, vel_b, False
+    if depth < 0: return vel_a, vel_b, False
 
     # Positional correction
     total_mass = mass_a + mass_b
     if total_mass != 0:
         effect_a = mass_a / total_mass
-        a.centerx = int(a.centerx + normal[0] * depth * effect_a)
-        a.centery = int(a.centery + normal[1] * depth * effect_a)
+        a.centerx = a.centerx + normal[0] * depth * effect_a
+        a.centery = a.centery + normal[1] * depth * effect_a
 
-        effect_b = mass_a / total_mass
-        b.centerx = int(b.centerx - normal[0] * depth * effect_b)
-        b.centery = int(b.centery - normal[1] * depth * effect_b)
+        effect_b = mass_b / total_mass
+        b.centerx = b.centerx - normal[0] * depth * effect_b
+        b.centery = b.centery - normal[1] * depth * effect_b
 
     # Velocity correction
     relative_v = (1 + bounce) * (dot(vel_a, normal) - dot(vel_b, normal))
@@ -187,7 +187,7 @@ def solve_rect_overlap(a, b, vel_a=(0, 0), vel_b=(0, 0), mass_a=1, mass_b=1, bou
         vel_a = add(vel_a, scale(normal, -relative_v * mass_a / total_mass))
         vel_b = add(vel_b, scale(normal,  relative_v * mass_b / total_mass))
 
-    return a, b, vel_a, vel_b, True
+    return vel_a, vel_b, True
 
 
 def damping(vel, damp=0.1):
@@ -237,7 +237,7 @@ def time():
 
 def delta():
     """Return the time passed from the previous frame to this frame."""
-    if FPS:
+    if FRAMERATE:
         return DELTA
     # I know this looks wierd, but "get_time" returns the "delta",
     # really wierd.
@@ -280,8 +280,6 @@ def start_game(init, update):
         # set it to zero to unlimit.
         FRAME_CLOCK.tick(FRAMERATE)
         TIME += DELTA
-        # See what buttons are pressed this frame.
-        process_events()
 
         # Let you do what you need to do.
         try:

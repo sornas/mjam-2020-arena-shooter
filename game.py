@@ -1,61 +1,156 @@
 from ribs import *
+from dataclasses import dataclass
 
 # Asset dictionary for holding all your assets.
 assets = {}
+
+def clamp(val, low, high):
+    return min(max(val, low), high)
+
+@dataclass
+class Player:
+    centerx = 0
+    centery = 0
+    width = 40
+    height = 40
+
+    velocity = (0, 0)
+
+    walk_acc = 1000.0
+    max_walk_speed = 100
+    slow_down = 0.01
+
+
+def update_player(player, delta):
+    if key_down("d") or key_down(pg.K_RIGHT):
+        player.velocity = (player.velocity[0] + player.walk_acc * delta,
+                           player.velocity[1])
+    elif key_down("a") or key_down(pg.K_LEFT):
+        player.velocity = (player.velocity[0] - player.walk_acc * delta,
+                           player.velocity[1])
+    else:
+        # Yes, this is supposed to be an exponent.
+        player.velocity = (player.velocity[0] * (player.slow_down ** delta),
+                           player.velocity[1])
+
+    # Gravity
+    player.velocity = (player.velocity[0], player.velocity[1] + 100 * delta)
+
+    max_speed = player.max_walk_speed
+    clamped_horizontal_speed = clamp(player.velocity[0], max_speed, -max_speed)
+    player.velocity = (clamped_horizontal_speed, player.velocity[1])
+
+    player.centerx += player.velocity[0] * delta
+    player.centery += player.velocity[1] * delta
+
+
+def draw_player(player):
+    window = pg.display.get_surface()
+    pg.draw.rect(window, pg.Color(100, 30, 30), (player.centerx - player.width / 2,
+                                                 player.centery - player.height / 2,
+                                                 player.width,
+                                                 player.height))
+
+levels = [
+"""
+##########
+#        #
+#        #
+#        #
+# S    E #
+##########
+""",
+"""
+##########
+#        #
+# S      #
+####     #
+####   E #
+##########
+""",
+"""
+##########
+#      S #
+####     #
+##       #
+##E      #
+##########
+""",
+]
+
+def parse_level(level_string):
+    GRID_SIZE = 40
+
+    walls = []
+    goals = []
+    start = None
+
+    level_lines = level_string.strip().split("\n")
+    for tile_y, line in enumerate(level_lines):
+        y = tile_y * GRID_SIZE
+        for tile_x, c in enumerate(line):
+            x = tile_x * GRID_SIZE
+            r = pg.Rect(x, y, GRID_SIZE, GRID_SIZE)
+            if c == "#":
+                # It's a wall
+                walls.append(r)
+            elif c == "E":
+                # It's a goal
+                goals.append(r)
+            elif c == "S":
+                # It's the start
+                start = (x, y)
+
+    return walls, goals, start
+
+
 def init():
-    """ A function for loading all your assets,
-        this is since audio assets in particlular
-        can at their earliest be loaded here.
+    """ A function for loading all your assets.
+        (Audio assets can at their earliest be loaded here.)
     """
+    # Load images here
     assets["teapot"] = pg.image.load("teapot.png")
+
+    # Load sounds here
     assets["plong"] = pg.mixer.Sound("plong.wav")
 
 
+current_level = 0
 def update():
     """The program starts here"""
-    num_teapots = 1
-
+    global current_level
     # Initialization (only runs on start/restart)
-    rect_a = pg.Rect(200, 200, 100, 100)
-    vel_a = (0, 1000)
-    rect_b = pg.Rect(250, 250, 50, 100)
-    vel_b = (0, 0)
+    player = Player()
+
+    walls, goals, start = parse_level(levels[current_level])
+    player.centerx = start[0]
+    player.centery = start[1]
 
     # Main update loop
     while True:
-        if key_pressed("A") or key_pressed(pg.K_LEFT):
-            assets["plong"].play()
-            num_teapots += 1
-            restart()
+        update_player(player, delta())
+        draw_player(player)
 
-        for i in range(num_teapots):
-            r = 100
-            a = i * 1 / 5 + time()
-            x = math.cos(a) * r + SCREEN_WIDTH / 2
-            y = math.sin(a) * r + SCREEN_WIDTH / 2
-            draw_transformed(assets["teapot"], (x, y), (0.5, 2.0), a * 180 / math.pi)
+        for wall in walls:
+            window = pg.display.get_surface()
+            pg.draw.rect(window, pg.Color(100, 100, 100), wall)
 
-        if pg.mouse.get_pressed()[0]:
-            vel_a = ((rect_a.centerx - pg.mouse.get_pos()[0]) / -DELTA,
-                     (rect_a.centery - pg.mouse.get_pos()[1]) / -DELTA)
-            rect_a.center = pg.mouse.get_pos()
-        rect_a, rect_b, vel_a, vel_b, hit = solve_rect_overlap(rect_a, rect_b, vel_a, vel_b, bounce=1.0)
+            player_vel, wall_vel, overlap = solve_rect_overlap(player,
+                                                               wall,
+                                                               player.velocity,
+                                                               mass_b=0,
+                                                               bounce=0.1)
+            player.velocity = player_vel
 
-        print(vel_a, vel_b)
-        vel_b = damping(vel_b, 0.1)
-        rect_b.x += int(vel_b[0] * DELTA)
-        rect_b.y += int(vel_b[1] * DELTA)
+        for goal in goals:
+            window = pg.display.get_surface()
+            pg.draw.rect(window, pg.Color(20, 100, 20), goal)
 
-        if not pg.mouse.get_pressed()[0]:
-            rect_a.x += int(vel_a[0] * DELTA)
-            rect_a.y += int(vel_a[1] * DELTA)
+            normal, depth = overlap_data(player, goal)
+            if depth > 0:
+                current_level = (current_level + 1) % len(levels)
+                restart()
 
-        window = pg.display.get_surface()
-        pg.draw.rect(window, pg.Color(255, 200, 200), rect_a)
-        if hit:
-            pg.draw.rect(window, pg.Color(200, 255, 255), rect_b)
-        else:
-            pg.draw.rect(window, pg.Color(200, 0, 255), rect_b)
 
         # Main loop ends here, put your code above this line
         yield
