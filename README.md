@@ -34,5 +34,5 @@ simply call
 python3 game.py
 ```
 
-To modify the game, open game.py and make your own changes
+To modify the game, open game.py and make your own changes.
 

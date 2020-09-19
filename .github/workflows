@@ -17,7 +17,7 @@ jobs:
         run: |
           cd docs
           pip install pygments
-          ./doc-generator.py
+          python doc-generator.py
       -
         name: Deploy to GitHub Pages
         if: success()
