@@ -4,6 +4,9 @@ from dataclasses import dataclass
 # Asset dictionary for holding all your assets.
 assets = {}
 
+def clamp(val, low, high):
+    return min(max(val, low), high)
+
 @dataclass
 class Player:
     centerx = 0
@@ -30,10 +33,11 @@ def update_player(player, delta):
         player.velocity = (player.velocity[0] * (player.slow_down ** delta),
                            player.velocity[1])
 
+    # Gravity
     player.velocity = (player.velocity[0], player.velocity[1] + 100 * delta)
 
     max_speed = player.max_walk_speed
-    clamped_horizontal_speed = max(min(player.velocity[0], max_speed), -max_speed)
+    clamped_horizontal_speed = clamp(player.velocity[0], max_speed, -max_speed)
     player.velocity = (clamped_horizontal_speed, player.velocity[1])
 
     player.centerx += player.velocity[0] * delta
@@ -113,8 +117,8 @@ def init():
 
 current_level = 0
 def update():
-    global current_level
     """The program starts here"""
+    global current_level
     # Initialization (only runs on start/restart)
     player = Player()
 
@@ -131,14 +135,18 @@ def update():
             window = pg.display.get_surface()
             pg.draw.rect(window, pg.Color(100, 100, 100), wall)
 
-            solution = solve_rect_overlap(player, wall, player.velocity, mass_b=0, bounce=0.1)
-            player.velocity = solution[2]
+            player_vel, wall_vel, overlap = solve_rect_overlap(player,
+                                                               wall,
+                                                               player.velocity,
+                                                               mass_b=0,
+                                                               bounce=0.1)
+            player.velocity = player_vel
 
         for goal in goals:
             window = pg.display.get_surface()
             pg.draw.rect(window, pg.Color(20, 100, 20), goal)
 
-            _, depth = overlap_data(player, goal)
+            normal, depth = overlap_data(player, goal)
             if depth > 0:
                 current_level = (current_level + 1) % len(levels)
                 restart()
