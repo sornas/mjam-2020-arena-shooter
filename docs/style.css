@@ -48,6 +48,7 @@ main > * {
     font-weight: 700;
     padding: 0.4em;
     padding-left: 0.5em;
+    margin-bottom: 0.6em 0em;
 }
 
 .docstr .header, .docstr .content {
