@@ -20,7 +20,7 @@ main > * {
 }
 
 .func {
-    margin-top: 1.0em;
+    margin-top: 2.0em;
 }
 
 .args {
@@ -82,6 +82,15 @@ main > * {
 .toc a {
     margin-left: 2em;
     text-decoration: none;
+    color: #2000ff;
+    font-family: monospace;
+    font-size: 1.2em;
+    width: 100%;
+    display: inline-block;
+    padding: 4px;
+}
+.toc a:hover {
+    background-color: #e1e1e1
 }
 
 .highlight {
