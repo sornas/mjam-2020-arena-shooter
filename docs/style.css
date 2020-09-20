@@ -76,6 +76,9 @@ main > * {
     border-left: 4px #2e1177 solid;
 }
 
+.toc h1 {
+    font-size: 1.3em;
+}
 .toc h2 {
     font-size: 1.2em;
     margin-left: 1em;
