@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from dataclasses import dataclass
 import pygments
 import pygments.lexers as lexers
@@ -88,31 +89,23 @@ def parse_docs(filename):
 
 
 def gen_table_of_content(pg, sr):
-    html = "<div class='toc'><h1>Table of Contents</h1>"
+    html = "<div class='toc'><h2>Table of Contents</h2>"
 
-    html += "<div><h2>PyGame Helper</h2>"
-    html += "<br>".join(f"<a href='#{x.id_name}'>{x.name}</a>" for x in pg)
-    html += "</div>"
-
-    html += "<div><h2>Snake Ribs</h2>"
     html += "<br>".join(f"<a href='#{x.id_name}'>{x.name}</a>" for x in sr)
     html += "</div>"
     return html
 
 style = open("style.css", "r").read()
 style += pygment_format.get_style_defs()
-pg_docs = parse_docs("pygame.docs")
 sr_docs = parse_docs("ribs.docs")
 
-toc = gen_table_of_content(pg_docs, sr_docs)
-with open("index.html", "w+") as f:
-    intro = "<h1>TODO INTRO</h1>"
+toc = gen_table_of_content([], sr_docs)
+with open("docs.html", "w+") as f:
+    intro = "<h1>Snake Ribs</h1><p>A small and simple PyGame wrapper, for getting started quick and easy.</p>"
     f.write("<!--- This file is auto generated, please do not edit -->")
     f.write(f"<html><head><title>Documentation</title><style>{style}</style></head><body>")
     f.write(intro)
     f.write(toc)
-    f.write("<hr><div id='pygame'>")
-    f.write("".join([gen_doc(x.name, x.id_name, x.docs) for x in pg_docs]))
     f.write("</div><hr><div id='lithekod'>")
     f.write("".join([gen_doc(x.name, x.id_name, x.docs) for x in sr_docs]))
     f.write("</body></html>")
