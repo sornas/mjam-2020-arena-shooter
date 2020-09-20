@@ -2,6 +2,15 @@ body {
     font-family: sans-serif;
 }
 
+main {
+    max-width: 100%;
+}
+
+main > * {
+    margin: 0px auto;
+    max-width: 960px;
+}
+
 .swatch {
     display: inline-block;
     width: 1em;
@@ -71,4 +80,25 @@ body {
 .toc a {
     margin-left: 2em;
     text-decoration: none;
+}
+
+@media screen and (min-width: 960px) {
+    .toc {
+        width: 300px;
+        position: fixed;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        background-color: white;
+        z-index: 1;
+        top: 0;
+        max-height: calc(100vh);
+    }
+    #lithekod, #pygame {
+        margin: 0px auto;
+    }
+
+    /*If the TOC is floating, don't put stuff underneath*/
+    main {
+        padding-left: 300px;
+    }
 }
