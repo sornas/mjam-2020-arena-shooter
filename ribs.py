@@ -123,6 +123,16 @@ def clear_screen(color):
     bottom_right = pg.display.get_surface().get_size()
     pg.draw.rect(window, color, (top_left, bottom_right))
 
+
+def draw_text(text, position, size, color=pg.Color(255, 255, 255), font_name=None):
+
+    font = pg.font.SysFont(font_name, size)
+
+    rendered_text = font.render(text, True, color)
+
+    window = pg.display.get_surface()
+    window.blit(rendered_text, position)
+
 #
 # Simple physics and collision
 #
