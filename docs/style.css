@@ -32,6 +32,7 @@ body {
 
 .docstr {
     margin-top: 0.5em;
+    margin-left: 2em;
 }
 
 .docstr .header {
@@ -57,4 +58,13 @@ body {
 .docstr {
     border-radius: 10px;
     background-color: #EEE;
+}
+
+.toc h2 {
+    font-size: 1.2em;
+    margin-left: 1em;
+}
+.toc a {
+    margin-left: 2em;
+    text-decoration: none;
 }

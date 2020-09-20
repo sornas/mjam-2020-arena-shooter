@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ## Documentation
 
-The documentation for RIBS can be found at [tbd]
+The documentation for RIBS can be found at https://lithekod.github.io/snake-ribs/
 
 ## Running the game
 
