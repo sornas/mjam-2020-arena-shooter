@@ -212,7 +212,7 @@ start_game(init, update)
 --!
 This code would create a game that prints the following:
 
-<pre>
+<pre style="font-size:1.2em">
 Initialized, only called once!
 I'm called for every start and restart!
 Update!
