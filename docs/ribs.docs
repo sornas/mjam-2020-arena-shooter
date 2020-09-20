@@ -6,33 +6,38 @@ Also note that not everything is documented, if it's not
 documented you probably don't have to care about it.
 
 # `key_down(key)`
-Takes a key, that's either a keycode or a character,
-and says if it's down or not.
+Takes a key, that's either a keycode or a character, and returns true if that key is held.
 
 !--params
-[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+[key] A string with the character or keycode on the form (`pg.K_****`) of the button to check.
 --!
+<p>
+For a list of keycodes, see the table in the <a href="https://www.pygame.org/docs/ref/key.html?highlight=key#pygame.key.key_code">pygame documentation</a>
+</p>
 
 ## ex
 !--code
 if key_down("a"):
     print("COWABUNGA")
 --!
-This code would print "COWABUNGA" to the console when the "a" button is held.
+This code would print "COWABUNGA" to the console while the "a" button is held.
 
 ## ex
 !--code
 if key_down(pg.K_LEFT):
     print("Move left")
 --!
-This code would print "Move left" to the console when the spacebar is held.
+This code would print "Move left" to the console while the left arrow key is held.
 
 # `key_released(key)`
-Takes a key, that's either a keycode or a character,
-and says if it was released this frame.
+Takes a key, that's either a keycode or a character and returns true if the key was released this frame. 
+
 !--params
-[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+[key] A string with the character or keycode on the form (`pg.K_****`) of the button to check.
 --!
+<p>
+For a list of keycodes, see the table in the <a href="https://www.pygame.org/docs/ref/key.html?highlight=key#pygame.key.key_code">pygame documentation</a>
+</p>
 
 ## ex
 !--code
@@ -42,23 +47,32 @@ if key_released("a"):
 This code would print "hold longer maybe?" to the console when the "a" button was released.
 
 # `key_pressed(key)`
-Takes a key, that's either a keycode or a character,
-and says if it was pressed down this frame.
+Takes a key, that's either a keycode or a character, and returns true if that key was pressed this frame.
 !--params
-[key] A string with the character or keycode (`pk.K_****`) of the button to check.
+[key] A string with the character or keycode on the form (`pg.K_****`) of the button to check.
 --!
+<p>
+For a list of keycodes, see the table in the <a href="https://www.pygame.org/docs/ref/key.html?highlight=key#pygame.key.key_code">pygame documentation</a>
+</p>
 
 ## ex
 !--code
-if key_down(pg.K_SPACE):
+if key_pressed(pg.K_SPACE):
     print("JUMP")
 --!
 This code would print "JUMP" to the console when the spacebar is pressed, and only that frame.
 
 # `draw_transformed(img, position, scale=(1., 1.), degrees=0)`
-Draws a sprite centered around `position` scaled by `scale` and
-rotated clockwise `degrees`. This function is just a convenience function to
-make it simpler to draw sprites.
+Draws a sprite centered around `position` scaled by `scale` and rotated
+clockwise `degrees`. The position to draw the sprite is given in pixels
+relative to the top left corner of the screen.
+<p>
+The <code>img</code> argument is an image object loaded by
+<code>pg.image.load</code>. Note that if you want to draw lots of images, it is
+not a good idea to re-load the images every frame. Instead, load images into a
+variable in the <code>init</code> function and do the drawing in
+<code>update</code>
+</p>
 !--params
 [img] The image to be used as a sprite.
 [position] The center position of the sprite.
@@ -222,3 +236,4 @@ Update!
 .
 .
 </pre>
+
