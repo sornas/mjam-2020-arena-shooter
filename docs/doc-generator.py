@@ -16,6 +16,56 @@ def gen_id(string):
     return string.split("(")[0].replace(".", "_")
 
 
+def pretty_function_name(name):
+    outer_match = re.search(r"(\w+)\((.*)\)", name)
+    # If this is not a function, just return the raw name
+    if outer_match is not None:
+        fn_name = outer_match.group(1)
+        arg_string = outer_match.group(2)
+
+        args = []
+        if arg_string:
+            # Try to build a list of arguments
+            comma_separated = arg_string.split(',')
+            # Spliting on , has side effects when the default value has , in it. We'll try
+            # to rectify that by re-joining string which don't look like identifiers
+            for part in comma_separated:
+                # If this is a new argument
+                arg_regex = re.search(r"([A-z]+)(=?)(.*)", part)
+                if arg_regex is not None:
+                    arg_name = arg_regex.group(1)
+                    if arg_regex.group(2) == '':
+                        # If this is not a keyword arg, add it to the list:
+                        args.append((arg_name, None))
+                    else:
+                        # This is a keyword arg, add it, along with a list of 
+                        args.append((arg_name, [arg_regex.group(3)]))
+                else:
+                    args[-1][1].append(part)
+
+        def format_arg(arg):
+            (name, default) = arg
+            result = f"<span class='arg'>{name}</span>"
+            if default:
+                result += "<span class='eq'>=</span>"
+                result += "<span class='default_arg'>"
+                result += ", ".join(default)
+                result += "</span>"
+            return result
+
+        arg_list = []
+
+        # Pretty print everything
+        result  = f"<span class='fn_name'>{fn_name}</span>"
+        result += f"<span class='paren'>( </span>"
+        result += "<span class='comma'>, </span>".join([format_arg(x) for x in args])
+        result += f"<span class='paren'> )</span>"
+        return result
+    return name
+
+
+
+
 def gen_doc(name, id_name, docstrings):
     def format_doc(i, x):
         if i == 0:
@@ -47,8 +97,9 @@ def gen_doc(name, id_name, docstrings):
         return f"<div class='{classname}'><div class='header {prefix}'>{prefix}</div><div class='content'>" + x.replace('\n\n', '<br>') + "</div></div>"
 
     if docstrings:
+        title = pretty_function_name(name)
         out = "".join([format_doc(i, x) for i, x in enumerate(docstrings)])
-        return f"<div id='{id_name}' class='func'><h2 class='title'>{name}</h2>{out}</div>"
+        return f"<div id='{id_name}' class='func'><h2 class='title'>{title}</h2>{out}</div>"
     else:
         return f"<h2 id='{id_name}' class='constant'>{name}</h2>"
 

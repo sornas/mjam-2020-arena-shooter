@@ -1,9 +1,45 @@
 # Notes about RIBS
+<p>
+Ribs is super small and easy to use collection of functions to help make pygame
+easier to work with. This includes things like drawing images in a single function,
+handling user input, and a few other things.
+</p>
+<p>
+If you want do do something in your game but can't find a
+suitable function, you may want use pygame directly. All documentation for the pygame
+can be found at <a href="https://www.pygame.org/docs/">https://www.pygame.org/docs/</a>
+</p>
+<p>
+Also note that not everything is documented, if it's not documented you
+probably don't have to care about it.
+</p>
 Ribs is a super small and easy to use collection of functions
 to help with some things pygame don't help with.
 
 Also note that not everything is documented, if it's not
 documented you probably don't have to care about it.
+
+# Keyword and default arguments
+
+<p>
+Some of the functions in ribs use a python feature you may not have come across: default arguments. These allow you to only specify a few of the arguments to a function, and leave the rest. For example, the definition of <code>draw_transformed</code> looks like this:
+</p>
+<code><span class="fn_name">draw_transformed</span><span class="paren">( </span><span class="arg">img</span><span class="comma">, </span><span class="arg">position</span><span class="comma">, </span><span class="arg">scale</span><span class="eq">=</span><span class="default_arg">(1.,  1.)</span><span class="comma">, </span><span class="arg">degrees</span><span class="eq">=</span><span class="default_arg">0</span><span class="paren"> )</span></code>
+<p>
+The <code class='default_arg'>=x</code> part of the <code>scale</code> and <code>degrees</code> mean that you can call the function as one of
+</p>
+!--code
+draw_transformed( img, (100, 100)) # Default scale and degrees
+draw_transformed( img, (100, 100), (2, 2)) # Scale up by 2, leave degrees unchanged
+draw_transformed( img, (100, 100), (2, 2), 90) # Scale up by 2, rotate by 90 degrees
+--!
+You can also specify one of many arguments by typing out its name. This is useful if you want
+to leave the first argument as default, but change another
+
+!--code
+draw_transformed( img, (100, 100), , degrees = 90) # Rotate 90 degrees, default scale
+--!
+
 
 # `key_down(key)`
 Takes a key, that's either a keycode or a character, and returns true if that key is held.
