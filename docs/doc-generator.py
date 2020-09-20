@@ -4,6 +4,7 @@ import pygments
 import pygments.lexers as lexers
 import pygments.formatters.html as formatters
 import re
+import html
 pygment_lexer = lexers.get_lexer_for_filename("what.py")
 pygment_format = formatters.HtmlFormatter()
 
@@ -87,10 +88,13 @@ def parse_docs(filename):
             res.append(doc)
         return res
 
+def table_of_content_link(thing):
+    name = html.escape(thing.id_name)
+    return f"<a href='#{name}'>{thing.name.split('(')[0]}</a>"
 
 def gen_table_of_content(pg, sr):
     html = "<div class='toc'><h2>Table of Contents</h2>"
-    html += "<br>".join(f"<a href='#{x.id_name}'>{x.name}</a>" for x in sr)
+    html += "<br>".join(f"{table_of_content_link(x)}" for x in sr)
     html += "</div>"
 
     # Clsoe toc div
