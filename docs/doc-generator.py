@@ -89,8 +89,11 @@ def parse_docs(filename):
         return res
 
 def table_of_content_link(thing):
-    name = html.escape(thing.id_name)
-    return f"<a href='#{name}'>{thing.name.split('(')[0]}</a>"
+    target_id = html.escape(thing.id_name)
+
+    # The name contains a leading code tag and arguments. Get rid of those
+    name = html.escape(thing.name.split('(')[0].replace('<code>', ''))
+    return f"<a href='#{target_id}'>{name}</a>"
 
 def gen_table_of_content(pg, sr):
     html = "<div class='toc'><h2>Table of Contents</h2>"
