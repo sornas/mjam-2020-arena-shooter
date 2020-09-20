@@ -113,9 +113,9 @@ with open("index.html", "w+") as f:
     intro = "<h1>Snake Ribs</h1><p>A small and simple PyGame wrapper, for getting started quick and easy.</p>"
     f.write("<!--- This file is auto generated, please do not edit -->")
     f.write(f"<html><head><title>Documentation</title><style>{style}</style></head><body>")
-    f.write(intro)
     f.write(toc)
     f.write("<main>")
+    f.write(intro)
     f.write("<div id='lithekod'>")
     f.write("".join([gen_doc(x.name, x.id_name, x.docs) for x in sr_docs]))
     f.write("</div>")

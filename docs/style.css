@@ -97,7 +97,7 @@ main > * {
 .highlight {
     font-family: "Source Code Pro",monospace;
     font-size: 1.2em;
-    background-color: #F5F5F5;
+    background-color: #eee;
     padding: 10px;
     margin: 10px 0px;
 }
