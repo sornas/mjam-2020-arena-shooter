@@ -19,10 +19,10 @@ def gen_doc(name, id_name, docstrings):
     def format_doc(i, x):
         if i == 0:
             classname = "docstr explain"
-            prefix = "Doc"
+            prefix = "Description"
         else:
             classname = "docstr example"
-            prefix = "Ex"
+            prefix = "Example"
 
         while True:
             start_glyph = "!--"
@@ -92,6 +92,9 @@ def gen_table_of_content(pg, sr):
     html = "<div class='toc'><h2>Table of Contents</h2>"
 
     html += "<br>".join(f"<a href='#{x.id_name}'>{x.name}</a>" for x in sr)
+    html += "</div>"
+
+    # Clsoe toc div
     html += "</div>"
     return html
 

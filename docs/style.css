@@ -36,9 +36,8 @@ body {
 }
 
 .docstr .header {
-    color: #EEE;
     font-weight: 700;
-    padding: 0.1em;
+    padding: 0.4em;
     padding-left: 0.5em;
 }
 
@@ -48,16 +47,21 @@ body {
 }
 
 .Doc {
-    background-color: #267711;
 }
 
 .Ex {
-    background-color: #2e1177;
 }
 
 .docstr {
-    border-radius: 10px;
     background-color: #EEE;
+}
+
+.explain .header {
+    border-left: 4px #267711 solid;
+}
+
+.example .header {
+    border-left: 4px #2e1177 solid;
 }
 
 .toc h2 {
