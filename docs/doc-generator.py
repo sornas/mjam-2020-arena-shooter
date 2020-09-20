@@ -90,7 +90,6 @@ def parse_docs(filename):
 
 def gen_table_of_content(pg, sr):
     html = "<div class='toc'><h2>Table of Contents</h2>"
-
     html += "<br>".join(f"<a href='#{x.id_name}'>{x.name}</a>" for x in sr)
     html += "</div>"
 
@@ -103,7 +102,7 @@ style += pygment_format.get_style_defs()
 sr_docs = parse_docs("ribs.docs")
 
 toc = gen_table_of_content([], sr_docs)
-with open("docs.html", "w+") as f:
+with open("index.html", "w+") as f:
     intro = "<h1>Snake Ribs</h1><p>A small and simple PyGame wrapper, for getting started quick and easy.</p>"
     f.write("<!--- This file is auto generated, please do not edit -->")
     f.write(f"<html><head><title>Documentation</title><style>{style}</style></head><body>")
