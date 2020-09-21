@@ -1,4 +1,6 @@
-# snake-ribs
+
+![Snake-Ribs logo](docs/ribs-logo.svg)
+# Snake-Ribs
 
 A simple Python code skeleton for making games. The code has documentation in
 the `docs` folder, and all code that is needed to get up and running is Python,
