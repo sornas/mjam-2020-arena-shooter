@@ -167,3 +167,29 @@ svg.logo {
         height: 100vh;
     }
 }
+
+@media screen and (min-width: 720px) {
+    .toc {
+        width: 240px;
+        position: fixed;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: white;
+        z-index: 1;
+        top: 0;
+        max-height: 100vh;
+        border-right: 2px #e6e6e6 solid;
+    }
+    #lithekod, #pygame {
+        margin: 0px auto;
+    }
+
+    /*If the TOC is floating, don't put stuff underneath*/
+    main {
+        padding-left: 250px;
+    }
+
+    .toc {
+        height: 100vh;
+    }
+}

@@ -92,7 +92,8 @@ window.
 ## ex
 !--code
 assets["teapot"] = pg.image.load("teapot.png")
-draw_transformed(assets["teapot"], (100, 100), (1, 0.5), time)
+draw_transformed(assets["teapot"], (100, 100),
+                 (1, 0.5), time)
 --!
 This code would draw the "teapot.png" image (given that you have one),
 and given that `time` was the "time since the program started", this
@@ -148,7 +149,11 @@ rect_a = pg.Rect(200, 200, 100, 100)
 vel_a = (0, 1000)
 rect_b = pg.Rect(250, 250, 50, 100)
 vel_b = (0, 0)
-vel_a, vel_b, hit = solve_rect_overlap(rect_a, rect_b, vel_a, vel_b, bounce=1.0)
+vel_a, vel_b, hit = solve_rect_overlap(rect_a,\
+                                       rect_b,\
+                                       vel_a,\
+                                       vel_b,\
+                                       bounce=1.0)
 --!
 This code will create a collision between `rect_a` and `rect_b`. The collision will send
 rect_b flying since all the energy from `rect _a` is transferred to `rect_b`.
@@ -217,7 +222,7 @@ def init():
     print("Initialized, only called once!")
 
 def update():
-    print("I'm called for every start and restart!")
+    print("Called for every start and restart!")
     while True:
         print("Update!")
         yield
