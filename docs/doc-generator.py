@@ -27,8 +27,9 @@ def pretty_function_name(name):
         if arg_string:
             # Try to build a list of arguments
             comma_separated = arg_string.split(',')
-            # Spliting on , has side effects when the default value has , in it. We'll try
-            # to rectify that by re-joining string which don't look like identifiers
+            # Spliting on , has side effects when the default value has , in
+            # it. We'll try to rectify that by re-joining string which don't
+            # look like identifiers
             for part in comma_separated:
                 # If this is a new argument
                 arg_regex = re.search(r"([A-z_][0-9A-z_]*)(=?)(.*)", part)
@@ -38,7 +39,8 @@ def pretty_function_name(name):
                         # If this is not a keyword arg, add it to the list:
                         args.append((arg_name, None))
                     else:
-                        # This is a keyword arg, add it, along with a list of 
+                        # This is a keyword arg, add it, along with a list of
+                        # arguments.
                         args.append((arg_name, [arg_regex.group(3)]))
                 else:
                     args[-1][1].append(part)
@@ -53,8 +55,6 @@ def pretty_function_name(name):
                 result += "</span>"
             return result
 
-        arg_list = []
-
         # Pretty print everything
         result  = f"<span class='fn_name'>{fn_name}</span>"
         result += f"<span class='paren'>( </span>"
@@ -62,8 +62,6 @@ def pretty_function_name(name):
         result += f"<span class='paren'> )</span>"
         return result
     return name
-
-
 
 
 def gen_doc(name, id_name, docstrings):
@@ -117,10 +115,12 @@ def parse_docs(filename):
         block = ""
         for line in f:
             line = re.sub(r"`([^`]*)`", "<code>\g<1></code>", line)
+            if line == "\n":
+                line = "</p><p>"
             if line.startswith("# "):
                 if block:
-                    doc.docs.append(block)
-                    block = ""
+                    doc.docs.append(block + "</p>")
+                    block = "<p>"
                     res.append(doc)
 
                 doc = Docs()
@@ -129,13 +129,13 @@ def parse_docs(filename):
                 doc.id_name = gen_id(doc.name)
             elif line.startswith("## ex"):
                 if block:
-                    doc.docs.append(block)
-                    block = ""
+                    doc.docs.append(block + "</p>")
+                    block = "<p>"
             else:
                 block += line
         if block:
-            doc.docs.append(block)
-            block = ""
+            doc.docs.append(block + "</p>")
+            block = "<p>"
             res.append(doc)
         return res
 
