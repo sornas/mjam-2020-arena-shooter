@@ -119,5 +119,6 @@ with open("index.html", "w+") as f:
     f.write("<div id='lithekod'>")
     f.write("".join([gen_doc(x.name, x.id_name, x.docs) for x in sr_docs]))
     f.write("</div>")
+    f.write("<footer>Made with <span class='heart'>&lt;3</span> by LiTHe-kod</footer>")
     f.write("</main>")
     f.write("</body></html>")

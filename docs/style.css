@@ -115,6 +115,25 @@ main > * {
     font-size: 1.0em;
 }
 
+footer {
+    text-align: center;
+    padding: 2em;
+    border-top: 1px solid #e1e1e1;
+    color: #999;
+}
+
+.heart {
+    color: #C11;
+    animation-direction: alternate;
+    animation-name: heart-anim;
+    animation-duration: 2s;
+}
+
+@keyframes heart-anim {
+    from { color: #999; };
+    to { color: #F33; };
+}
+
 @media screen and (min-width: 960px) {
     .toc {
         width: 300px;
