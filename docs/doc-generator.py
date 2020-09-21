@@ -31,7 +31,7 @@ def pretty_function_name(name):
             # to rectify that by re-joining string which don't look like identifiers
             for part in comma_separated:
                 # If this is a new argument
-                arg_regex = re.search(r"([A-z]+)(=?)(.*)", part)
+                arg_regex = re.search(r"([A-z_][0-9A-z_]*)(=?)(.*)", part)
                 if arg_regex is not None:
                     arg_name = arg_regex.group(1)
                     if arg_regex.group(2) == '':

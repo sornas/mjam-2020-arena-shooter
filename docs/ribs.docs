@@ -6,7 +6,7 @@ handling user input, and a few other things.
 </p>
 <p>
 If you want do do something in your game but can't find a
-suitable function, you may want use pygame directly. All documentation for the pygame
+suitable function, you may want use pygame directly. All documentation for pygame
 can be found at <a href="https://www.pygame.org/docs/">https://www.pygame.org/docs/</a>
 </p>
 <p>
@@ -22,7 +22,10 @@ documented you probably don't have to care about it.
 # Keyword and default arguments
 
 <p>
-Some of the functions in ribs use a python feature you may not have come across: default arguments. These allow you to only specify a few of the arguments to a function, and leave the rest. For example, the definition of <code>draw_transformed</code> looks like this:
+Some of the functions in ribs use a Python feature you may not have come
+across: default arguments. These allow you to only specify a few of the
+arguments to a function, and leave the rest. For example, the definition of
+<code>draw_transformed</code> looks like this:
 </p>
 <code><span class="fn_name">draw_transformed</span><span class="paren">( </span><span class="arg">img</span><span class="comma">, </span><span class="arg">position</span><span class="comma">, </span><span class="arg">scale</span><span class="eq">=</span><span class="default_arg">(1.,  1.)</span><span class="comma">, </span><span class="arg">degrees</span><span class="eq">=</span><span class="default_arg">0</span><span class="paren"> )</span></code>
 <p>
