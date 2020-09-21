@@ -129,6 +129,13 @@ footer {
     animation-duration: 2s;
 }
 
+svg.logo {
+    width: calc(100% - 3em);
+    padding: 1.5em;
+    padding-bottom: 0px;
+    margin: auto;
+}
+
 @keyframes heart-anim {
     from { color: #999; };
     to { color: #F33; };

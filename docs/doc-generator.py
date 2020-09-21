@@ -96,7 +96,11 @@ def table_of_content_link(thing):
     return f"<a href='#{target_id}'>{name}</a>"
 
 def gen_table_of_content(pg, sr):
-    html = "<div class='toc'><h2>Table of Contents</h2>"
+    html = "<div class='toc'>"
+    html += "<svg class='logo' viewBox='0 0 112 45'>" +\
+            open("ribs-logo.svg").read() +\
+            "</svg>"
+    html += "<h2>Table of Contents</h2>"
     html += "<br>".join(f"{table_of_content_link(x)}" for x in sr)
     html += "</div>"
 
