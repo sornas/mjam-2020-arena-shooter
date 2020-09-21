@@ -123,12 +123,19 @@ def clear_screen(color):
     bottom_right = pg.display.get_surface().get_size()
     pg.draw.rect(window, color, (top_left, bottom_right))
 
+#
+# Text drawing
+#
 
-def draw_text(text, position, size, color=pg.Color(255, 255, 255), font_name=None):
+def draw_text(text, position, size=32, color=pg.Color(255, 255, 255), font=None):
+    """
+        Draw text at given position.
+        The position is in pixels from the top left of the window.
+        Optional arguments include size, color and font.
+    """
+    font_obj = pg.font.SysFont(font, size)
 
-    font = pg.font.SysFont(font_name, size)
-
-    rendered_text = font.render(text, True, color)
+    rendered_text = font_obj.render(text, True, color)
 
     window = pg.display.get_surface()
     window.blit(rendered_text, position)
