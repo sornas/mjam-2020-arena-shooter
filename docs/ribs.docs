@@ -99,6 +99,53 @@ and given that `time` was the "time since the program started", this
 would draw a sprite at (100, 100) shrunk to half size along the y axis, rotating
 around it's center.
 
+# `draw_text(text, position, size=32, color=pg.Color(255, 255, 255), font=None)`
+Draw `text` at `position`, which is given in pixels from the top left corner.
+Optional arguments include `size` given in points, `color` which is
+a standard pygame color and `font` which is a string. To get a list of
+available fonts, use `pg.font.get_fonts()`.
+!--params
+[text] The text to be drawn.
+[position] The top left corner of the text, in pixel coordinates.
+[size] The font size in points. (Optional)
+[color] The color of the text. (Optional)
+[font] Name of the font to use. (Optional)
+--!
+
+## ex
+!--code
+draw_text("Level: 1", (0, 0))
+--!
+Draw "Level: 1" in the top left corner of the screen.
+
+## ex
+!--code
+draw_text("Level: 2", (0, 0), size=100)
+--!
+Draw "Level: 2" with large letters in the top left corner of the screen.
+
+## ex
+!--code
+draw_text("Level: 3", (0, 0), color=pg.Color(255, 0, 0))
+--!
+Draw "Level: 3" in red in the top left corner of the screen.
+
+## ex
+!--code
+draw_text("Level: 4", (0, 0), font="Times New Roman")
+--!
+Draw "Level: 4" in the top left corner of the screen using the 'Times New Roman' font.
+Note that only fonts installed on the system can be used. Use
+`pg.font.get_fonts()` to get a list of fonts installed on your system.
+
+## ex
+!--code
+draw_text("Level: 5", (1000, 1000), 50, pg.Color(0, 255, 0), "Comic Sans MS")
+--!
+Draws the text "Level: 5", where the top of the "L" is at the coordinates
+(1000, 1000), a font size of 50, colored with green (you could use a swatch
+here), all written in Comic Sans.
+
 # `overlap_data(a, b)`
 Returns the axis that points from a to b, and the depth of the collision.
 If the depth is negative it means they are far away from overlapping.

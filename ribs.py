@@ -124,6 +124,34 @@ def clear_screen(color):
     pg.draw.rect(window, color, (top_left, bottom_right))
 
 #
+# Text drawing
+#
+
+LOADED_FONTS = {}
+def draw_text(text, position, size=32, color=pg.Color(255, 255, 255), font=None):
+    """
+        Draw text at given position.
+        The position is in pixels from the top left of the window.
+        Optional arguments include size, color and font.
+    """
+    global LOADED_FONTS
+
+    # Keep used fonts in memory.
+    # This is not a good solution if many different font sizes are used,
+    # but i cannot find a better way to do it...
+    if (font, size) not in LOADED_FONTS:
+        if len(LOADED_FONTS) > 100:
+            LOADED_FONTS.popitem()
+        LOADED_FONTS[(font, size)] = pg.font.SysFont(font, size)
+
+    font_obj = LOADED_FONTS[(font, size)]
+
+    rendered_text = font_obj.render(text, True, color)
+
+    window = pg.display.get_surface()
+    window.blit(rendered_text, position)
+
+#
 # Simple physics and collision
 #
 
