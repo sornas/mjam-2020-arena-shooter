@@ -1,5 +1,5 @@
 
-![Snake-Ribs logo](docs/ribs-logo.svg)
+<img src="docs/ribs-logo.svg" alt="Snake-ribs logo" width="250"></img>
 # Snake-Ribs
 
 A simple Python code skeleton for making games. The code has documentation in
