@@ -11,6 +11,11 @@ main > * {
     max-width: 960px;
 }
 
+code {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
 .swatch {
     display: inline-block;
     width: 1em;
@@ -192,4 +197,17 @@ svg.logo {
     .toc {
         height: 100vh;
     }
+}
+
+/* Function name highlighting */
+.paren, .comma {
+    color: #808080;
+}
+
+.eq, .default_arg {
+    color: #508157;
+}
+
+.arg {
+    color: #ad448e;
 }
