@@ -151,7 +151,7 @@ def update():
                 current_level = (current_level + 1) % len(levels)
                 restart()
 
-        draw_text("Level: {}".format(current_level + 1), (0, 0))
+        draw_text(f"Level: {current_level + 1}", (0, 0))
 
         # Main loop ends here, put your code above this line
         yield

@@ -101,13 +101,13 @@ around it's center.
 
 # `draw_text(text, position, size=32, color=pg.Color(255, 255, 255), font=None)`
 Draw `text` at `position`, which is given in pixels from the top left corner.
-Optional arguments include `size` given in pixels, `color` which is
+Optional arguments include `size` given in points, `color` which is
 a standard pygame color and `font` which is a string. To get a list of
 available fonts, use `pg.font.get_fonts()`.
 !--params
 [text] The text to be drawn.
 [position] The top left corner of the text, in pixel coordinates.
-[size] The font size in pixels. (Optional)
+[size] The font size in points. (Optional)
 [color] The color of the text. (Optional)
 [font] Name of the font to use. (Optional)
 --!
@@ -142,7 +142,9 @@ Note that only fonts installed on the system can be used. Use
 !--code
 draw_text("Level: 5", (1000, 1000), 50, pg.Color(0, 255, 0), "Comic Sans MS")
 --!
-Draw "Level: 5" using various formatting options.
+Draws the text "Level: 5", where the top of the "L" is at the coordinates
+(1000, 1000), a font size of 50, colored with green (you could use a swatch
+here), all written in Comic Sans.
 
 # `overlap_data(a, b)`
 Returns the axis that points from a to b, and the depth of the collision.
