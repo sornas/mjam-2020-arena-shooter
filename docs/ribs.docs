@@ -132,9 +132,9 @@ Draw "Level: 3" in red in the top left corner of the screen.
 
 ## ex
 !--code
-draw_text("Level: 4", (0, 0), font="Fira Code")
+draw_text("Level: 4", (0, 0), font="Times New Roman")
 --!
-Draw "Level: 4" in the top left corner of the screen using the 'Fira Code' font.
+Draw "Level: 4" in the top left corner of the screen using the 'Times New Roman' font.
 Note that only fonts installed on the system can be used. Use
 `pg.font.get_fonts()` to get a list of fonts installed on your system.
 
