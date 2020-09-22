@@ -115,6 +115,33 @@ main > * {
     font-size: 1.0em;
 }
 
+footer {
+    text-align: center;
+    padding: 2em;
+    border-top: 1px solid #e1e1e1;
+    color: #999;
+}
+
+.heart {
+    color: #C11;
+    animation-direction: alternate;
+    animation-name: heart-anim;
+    animation-duration: 2s;
+}
+
+svg.logo {
+    max-width: 10em;
+    width: calc(100% - 3em);
+    padding: 1.5em;
+    padding-bottom: 0px;
+    margin: auto;
+}
+
+@keyframes heart-anim {
+    from { color: #999; };
+    to { color: #F33; };
+}
+
 @media screen and (min-width: 960px) {
     .toc {
         width: 300px;
@@ -134,6 +161,32 @@ main > * {
     /*If the TOC is floating, don't put stuff underneath*/
     main {
         padding-left: 315px;
+    }
+
+    .toc {
+        height: 100vh;
+    }
+}
+
+@media screen and (min-width: 720px) {
+    .toc {
+        width: 240px;
+        position: fixed;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: white;
+        z-index: 1;
+        top: 0;
+        max-height: 100vh;
+        border-right: 2px #e6e6e6 solid;
+    }
+    #lithekod, #pygame {
+        margin: 0px auto;
+    }
+
+    /*If the TOC is floating, don't put stuff underneath*/
+    main {
+        padding-left: 250px;
     }
 
     .toc {
