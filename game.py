@@ -37,7 +37,7 @@ def update_player(player, delta):
     player.velocity = (player.velocity[0], player.velocity[1] + 100 * delta)
 
     max_speed = player.max_walk_speed
-    clamped_horizontal_speed = clamp(player.velocity[0], max_speed, -max_speed)
+    clamped_horizontal_speed = clamp(player.velocity[0], -max_speed, max_speed)
     player.velocity = (clamped_horizontal_speed, player.velocity[1])
 
     player.centerx += player.velocity[0] * delta
