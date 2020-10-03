@@ -18,8 +18,8 @@ def clamp(val, low, high):
 class Shot:
     centerx = 0
     centery = 0
-    width = 10
-    height = 10
+    size = 10
+    width = height = size
     
     velocity = (0, 0)
     shooter_idx = 0
@@ -31,19 +31,19 @@ def update_shot(shot, delta):
 
 def draw_shot(shot):
     window = pg.display.get_surface()
-    pg.draw.rect(window, pg.Color(30, 30, 100), (shot.centerx - shot.width / 2,
-                                                 shot.centery - shot.height / 2,
-                                                 shot.width,
-                                                 shot.height))
+    pg.draw.rect(window, pg.Color(30, 30, 100), (shot.centerx - shot.size / 2,
+                                                 shot.centery - shot.size / 2,
+                                                 shot.size,
+                                                 shot.size))
 
 @dataclass
 class Player:
     centerx = 0
     centery = 0
-    width = 20
-    height = 20
-    min_width = 1
-    min_height = 1
+    min_size = 1
+    max_size = 20
+    size = max_size
+    width = height = size
     gesmol_speeed = 0.5
     small = False
     shot_timeout = 0
@@ -89,8 +89,8 @@ def update_player(player, delta):
     player.centerx += player.velocity[0] * delta
     player.centery += player.velocity[1] * delta
 
-    if not player.small and key_down(player.key_small):
-        player.small = True
+    if key_pressed(player.key_small):
+        player.small = not player.small
 
     if player.shot_timeout > 0:
         player.shot_timeout -= delta
@@ -110,17 +110,18 @@ def update_player(player, delta):
             shots.append(shot)
             player.shot_timeout = player.shot_delay_start
 
-    if player.small and player.width > player.min_width:
-        player.width -= player.gesmol_speeed
-    if player.small and player.height > player.min_height:
-        player.height -= player.gesmol_speeed
+    if player.small and player.size > player.min_size:
+        player.size -= player.gesmol_speeed
+    elif not player.small and player.size < player.max_size:
+        player.size += player.gesmol_speeed
+    player.width = player.height = player.size
 
 def draw_player(player):
     window = pg.display.get_surface()
-    pg.draw.rect(window, pg.Color(100, 30, 30), (player.centerx - player.width / 2,
-                                                 player.centery - player.height / 2,
-                                                 player.width,
-                                                 player.height))
+    pg.draw.rect(window, pg.Color(100, 30, 30), (player.centerx - player.size / 2,
+                                                 player.centery - player.size / 2,
+                                                 player.size,
+                                                 player.size))
 
 # square
 LEVEL = \
@@ -178,8 +179,6 @@ def update():
 
     walls, start = parse_level(LEVEL)
 
-    player1.centerx = start[0][0]
-    player1.centery = start[0][1]
     player1.idx = 1
     player1.key_up = "w"
     player1.key_down = "s"
@@ -188,18 +187,25 @@ def update():
     player1.key_small = "f"
     player1.key_shoot = "c"
 
-    player2.centerx = start[1][0]
-    player2.centery = start[1][1]
     player2.idx = 2
     player2.key_up = "i"
     player2.key_down = "k"
     player2.key_left = "j"
     player2.key_right = "l"
     player2.key_small = "h"
-    player2.key_shoot = "."
+    player2.key_shoot = "n"
 
+    reset_players = True
     # Main update loop
     while True:
+        if reset_players:
+            reset_players = False
+            player1.centerx = start[0][0]
+            player1.centery = start[0][1]
+            player2.centerx = start[1][0]
+            player2.centery = start[1][1]
+            shots.clear()
+
         update_player(player1, delta())
         update_player(player2, delta())
 
@@ -209,7 +215,6 @@ def update():
                 to_remove.append(shot)
         for shot in to_remove:
             shots.remove(shot)
-
 
         draw_player(player1)
         draw_player(player2)
@@ -226,18 +231,19 @@ def update():
                 _, depth = overlap_data(player, shot)
                 if depth > 0 and player.idx != shot.shooter_idx:
                     print(f"{player.idx} ded by {shot.shooter_idx}")
+                    reset_players = True
         for shot in to_remove:
             shots.remove(shot)
 
         for wall in walls:
             window = pg.display.get_surface()
             pg.draw.rect(window, pg.Color(100, 100, 100), wall)
-
-            player1.velocity, wall_vel, overlap = solve_rect_overlap(player1,
-                                                                     wall,
-                                                                     player1.velocity,
-                                                                     mass_b=0,
-                                                                     bounce=0.1)
+            for player in (player1, player2):
+                player.velocity, wall_vel, overlap = solve_rect_overlap(player,
+                                                                        wall,
+                                                                        player.velocity,
+                                                                        mass_b=0,
+                                                                        bounce=0.1)
 
         # Main loop ends here, put your code above this line
         yield
