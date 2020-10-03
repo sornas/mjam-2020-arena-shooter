@@ -22,7 +22,7 @@ class Shot:
     height = 10
     
     velocity = (0, 0)
-    owner = None # shooter's id()
+    shooter_idx = 0
 
 def update_shot(shot, delta):
     shot.centerx += shot.velocity[0] * delta
@@ -47,6 +47,7 @@ class Player:
     gesmol_speeed = 0.5
     small = False
     shot_timeout = 0
+    idx = 0
 
     velocity = (0, 0)
 
@@ -70,7 +71,6 @@ def update_player(player, delta):
     player.velocity = (player.velocity[0] + (dx * player.walk_acc * delta),
                        player.velocity[1] + (dy * player.walk_acc * delta))
 
-    # y u tuple :(
     # ** delta ?
     player.velocity = (player.velocity[0] + player.velocity[0] * -player.slow_down * delta,
                        player.velocity[1] + player.velocity[1] * -player.slow_down * delta)
@@ -97,12 +97,11 @@ def update_player(player, delta):
             shot = Shot()
             shot.centerx = player.centerx
             shot.centery = player.centery
-            shot.owner = id(player)
+            shot.shooter_idx = player.idx
             shot.velocity = (player.velocity[0] * (player.shot_speed / player_speed),
                              player.velocity[1] * (player.shot_speed / player_speed))
             shots.append(shot)
             player.shot_timeout = player.shot_delay_start
-
 
     if player.small and player.width > player.min_width:
         player.width -= player.gesmol_speeed
@@ -123,8 +122,8 @@ LEVEL = \
 #        #
 #        #
 #        #
-# S      #
-#      S #
+# S    S #
+#        #
 #        #
 #        #
 #        #
@@ -167,15 +166,23 @@ def init():
 def update():
     """The program starts here"""
     # Initialization (only runs on start/restart)
-    player = Player()
+    player1 = Player()
+    player2 = Player()
 
     walls, start = parse_level(LEVEL)
-    player.centerx = start[0][0]
-    player.centery = start[0][1]
+
+    player1.centerx = start[0][0]
+    player1.centery = start[0][1]
+    player1.idx = 1
+
+    player2.centerx = start[1][0]
+    player2.centery = start[1][1]
+    player2.idx = 2
 
     # Main update loop
     while True:
-        update_player(player, delta())
+        update_player(player1, delta())
+        update_player(player2, delta())
 
         to_remove = []
         for shot in shots:
@@ -185,19 +192,26 @@ def update():
             shots.remove(shot)
 
 
-        draw_player(player)
+        draw_player(player1)
+        draw_player(player2)
         for shot in shots:
             draw_shot(shot)
+
+        for player in (player1, player2):
+            for shot in shots:
+                _, depth = overlap_data(player, shot)
+                if depth > 0 and player.idx != shot.shooter_idx:
+                    print(f"{player.idx} ded by {shot.shooter_idx}")
 
         for wall in walls:
             window = pg.display.get_surface()
             pg.draw.rect(window, pg.Color(100, 100, 100), wall)
 
-            player.velocity, wall_vel, overlap = solve_rect_overlap(player,
-                                                                    wall,
-                                                                    player.velocity,
-                                                                    mass_b=0,
-                                                                    bounce=0.1)
+            player1.velocity, wall_vel, overlap = solve_rect_overlap(player1,
+                                                                     wall,
+                                                                     player1.velocity,
+                                                                     mass_b=0,
+                                                                     bounce=0.1)
 
         # Main loop ends here, put your code above this line
         yield
