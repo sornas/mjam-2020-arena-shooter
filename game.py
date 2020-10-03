@@ -1,8 +1,15 @@
+import sys
+import math
+
 from ribs import *
 from dataclasses import dataclass
 
 # Asset dictionary for holding all your assets.
 assets = {}
+
+
+def vec_len(v):
+    return math.sqrt(v[0] ** 2 + v[1] ** 2)
 
 
 def clamp(val, low, high):
@@ -13,37 +20,53 @@ def clamp(val, low, high):
 class Player:
     centerx = 0
     centery = 0
-    width = 40
-    height = 40
+    width = 20
+    height = 20
+    min_width = 1
+    min_height = 1
+    gesmol_speeed = 0.5
+    small = False
 
     velocity = (0, 0)
 
     walk_acc = 1000.0
-    max_walk_speed = 100
-    slow_down = 0.01
+    max_speed = 250
+    slow_down = 4
 
 
 def update_player(player, delta):
-    if key_down("d") or key_down(pg.K_RIGHT):
-        player.velocity = (player.velocity[0] + player.walk_acc * delta,
-                           player.velocity[1])
-    elif key_down("a") or key_down(pg.K_LEFT):
-        player.velocity = (player.velocity[0] - player.walk_acc * delta,
-                           player.velocity[1])
-    else:
-        # Yes, this is supposed to be an exponent.
-        player.velocity = (player.velocity[0] * (player.slow_down ** delta),
-                           player.velocity[1])
+    dx, dy = (0, 0)
+    if key_down("a"):
+        dx -= 1
+    if key_down("d"):
+        dx += 1
+    if key_down("w"):
+        dy -= 1
+    if key_down("s"):
+        dy += 1
 
-    # Gravity
-    player.velocity = (player.velocity[0], player.velocity[1] + 100 * delta)
+    player.velocity = (player.velocity[0] + (dx * player.walk_acc * delta),
+                       player.velocity[1] + (dy * player.walk_acc * delta))
 
-    max_speed = player.max_walk_speed
-    clamped_horizontal_speed = clamp(player.velocity[0], -max_speed, max_speed)
-    player.velocity = (clamped_horizontal_speed, player.velocity[1])
+    # y u tuple :(
+    # ** delta ?
+    player.velocity = (player.velocity[0] + player.velocity[0] * -player.slow_down * delta,
+                       player.velocity[1] + player.velocity[1] * -player.slow_down * delta)
+
+    if (speed := vec_len(player.velocity)) > player.max_speed:
+        player.velocity = ((player.velocity[0] * (player.max_speed / speed)),
+                           (player.velocity[1] * (player.max_speed / speed)))
 
     player.centerx += player.velocity[0] * delta
     player.centery += player.velocity[1] * delta
+
+    if not player.small and key_down(" "):
+        player.small = True
+
+    if player.small and player.width > player.min_width:
+        player.width -= player.gesmol_speeed
+    if player.small and player.height > player.min_height:
+        player.height -= player.gesmol_speeed
 
 
 def draw_player(player):
@@ -53,40 +76,27 @@ def draw_player(player):
                                                  player.width,
                                                  player.height))
 
-levels = [
+# square
+LEVEL = \
 """
 ##########
 #        #
 #        #
-#        #
-# S    E #
-##########
-""",
-"""
-##########
 #        #
 # S      #
-####     #
-####   E #
-##########
-""",
-"""
-##########
 #      S #
-####     #
-##       #
-##E      #
+#        #
+#        #
+#        #
 ##########
-""",
-]
+"""
 
 
 def parse_level(level_string):
     GRID_SIZE = 40
 
     walls = []
-    goals = []
-    start = None
+    starts = []
 
     level_lines = level_string.strip().split("\n")
     for tile_y, line in enumerate(level_lines):
@@ -97,14 +107,11 @@ def parse_level(level_string):
             if c == "#":
                 # It's a wall
                 walls.append(r)
-            elif c == "E":
-                # It's a goal
-                goals.append(r)
             elif c == "S":
                 # It's the start
-                start = (x, y)
+                starts.append((x, y))
 
-    return walls, goals, start
+    return walls, starts
 
 
 def init():
@@ -118,16 +125,14 @@ def init():
     assets["plong"] = pg.mixer.Sound("plong.wav")
 
 
-current_level = 0
 def update():
     """The program starts here"""
-    global current_level
     # Initialization (only runs on start/restart)
     player = Player()
 
-    walls, goals, start = parse_level(levels[current_level])
-    player.centerx = start[0]
-    player.centery = start[1]
+    walls, start = parse_level(LEVEL)
+    player.centerx = start[0][0]
+    player.centery = start[0][1]
 
     # Main update loop
     while True:
@@ -138,23 +143,11 @@ def update():
             window = pg.display.get_surface()
             pg.draw.rect(window, pg.Color(100, 100, 100), wall)
 
-            player_vel, wall_vel, overlap = solve_rect_overlap(player,
+            player.velocity, wall_vel, overlap = solve_rect_overlap(player,
                                                                wall,
                                                                player.velocity,
                                                                mass_b=0,
                                                                bounce=0.1)
-            player.velocity = player_vel
-
-        for goal in goals:
-            window = pg.display.get_surface()
-            pg.draw.rect(window, pg.Color(20, 100, 20), goal)
-
-            normal, depth = overlap_data(player, goal)
-            if depth > 0:
-                current_level = (current_level + 1) % len(levels)
-                restart()
-
-        draw_text(f"Level: {current_level + 1}", (0, 0))
 
         # Main loop ends here, put your code above this line
         yield
