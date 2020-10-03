@@ -57,15 +57,22 @@ class Player:
     shot_speed = 150
     shot_delay_start = 1/5
 
+    key_up = None
+    key_down = None
+    key_left = None
+    key_right = None
+    key_shoot = None
+    key_small = None
+
 def update_player(player, delta):
     dx, dy = (0, 0)
-    if key_down("a"):
+    if key_down(player.key_left):
         dx -= 1
-    if key_down("d"):
+    if key_down(player.key_right):
         dx += 1
-    if key_down("w"):
+    if key_down(player.key_up):
         dy -= 1
-    if key_down("s"):
+    if key_down(player.key_down):
         dy += 1
 
     player.velocity = (player.velocity[0] + (dx * player.walk_acc * delta),
@@ -82,7 +89,7 @@ def update_player(player, delta):
     player.centerx += player.velocity[0] * delta
     player.centery += player.velocity[1] * delta
 
-    if not player.small and key_down(" "):
+    if not player.small and key_down(player.key_small):
         player.small = True
 
     if player.shot_timeout > 0:
@@ -90,7 +97,7 @@ def update_player(player, delta):
         if player.shot_timeout < 0:
             player.shot_timeout = 0
 
-    if key_down("c") and player.shot_timeout == 0:
+    if key_down(player.key_shoot) and player.shot_timeout == 0:
         # shoot
         player_speed = vec_len(player.velocity)
         if player_speed != 0:
@@ -174,10 +181,22 @@ def update():
     player1.centerx = start[0][0]
     player1.centery = start[0][1]
     player1.idx = 1
+    player1.key_up = "w"
+    player1.key_down = "s"
+    player1.key_left = "a"
+    player1.key_right = "d"
+    player1.key_small = "f"
+    player1.key_shoot = "c"
 
     player2.centerx = start[1][0]
     player2.centery = start[1][1]
     player2.idx = 2
+    player2.key_up = "i"
+    player2.key_down = "k"
+    player2.key_left = "j"
+    player2.key_right = "l"
+    player2.key_small = "n"
+    player2.key_shoot = "."
 
     # Main update loop
     while True:
