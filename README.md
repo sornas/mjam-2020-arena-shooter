@@ -26,6 +26,6 @@ $ python3 game.py
 - No scoring or anything.
 - Still unnamed.
 
-## `ribs.py`
+## ribs.py
 
-<img src="docs/ribs-logo.svg" alt="Snake-ribs logo" width="250"></img>
+<a href="https://github.com/lithekod/snake-ribs"><img src="docs/ribs-logo.svg" alt="Snake-ribs logo" width="250"></img></a>
