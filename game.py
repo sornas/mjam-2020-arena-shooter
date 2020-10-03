@@ -6,15 +6,35 @@ from dataclasses import dataclass
 
 # Asset dictionary for holding all your assets.
 assets = {}
-
+shots = []
 
 def vec_len(v):
     return math.sqrt(v[0] ** 2 + v[1] ** 2)
 
-
 def clamp(val, low, high):
     return min(max(val, low), high)
 
+@dataclass
+class Shot:
+    centerx = 0
+    centery = 0
+    width = 5
+    height = 5
+    
+    velocity = (0, 0)
+    owner = None # shooter's id()
+
+def update_shot(shot, delta):
+    shot.centerx += shot.velocity[0] * delta
+    shot.centery += shot.velocity[1] * delta
+    return True
+
+def draw_shot(shot):
+    window = pg.display.get_surface()
+    pg.draw.rect(window, pg.Color(30, 30, 100), (shot.centerx - shot.width / 2,
+                                                 shot.centery - shot.height / 2,
+                                                 shot.width,
+                                                 shot.height))
 
 @dataclass
 class Player:
@@ -32,7 +52,7 @@ class Player:
     walk_acc = 1000.0
     max_speed = 250
     slow_down = 4
-
+    shot_speed = 100
 
 def update_player(player, delta):
     dx, dy = (0, 0)
@@ -63,11 +83,23 @@ def update_player(player, delta):
     if not player.small and key_down(" "):
         player.small = True
 
+    if key_down("c"):
+        # shoot
+        player_speed = vec_len(player.velocity)
+        if player_speed != 0:
+            shot = Shot()
+            shot.centerx = player.centerx
+            shot.centery = player.centery
+            shot.owner = id(player)
+            shot.velocity = (player.velocity[0] * (player.shot_speed / player_speed),
+                             player.velocity[1] * (player.shot_speed / player_speed))
+            shots.append(shot)
+
+
     if player.small and player.width > player.min_width:
         player.width -= player.gesmol_speeed
     if player.small and player.height > player.min_height:
         player.height -= player.gesmol_speeed
-
 
 def draw_player(player):
     window = pg.display.get_surface()
@@ -90,7 +122,6 @@ LEVEL = \
 #        #
 ##########
 """
-
 
 def parse_level(level_string):
     GRID_SIZE = 40
@@ -137,17 +168,28 @@ def update():
     # Main update loop
     while True:
         update_player(player, delta())
+
+        to_remove = []
+        for shot in shots:
+            if not update_shot(shot, delta()):
+                to_remove.append(shot)
+        for shot in to_remove:
+            shots.remove(shot)
+
+
         draw_player(player)
+        for shot in shots:
+            draw_shot(shot)
 
         for wall in walls:
             window = pg.display.get_surface()
             pg.draw.rect(window, pg.Color(100, 100, 100), wall)
 
             player.velocity, wall_vel, overlap = solve_rect_overlap(player,
-                                                               wall,
-                                                               player.velocity,
-                                                               mass_b=0,
-                                                               bounce=0.1)
+                                                                    wall,
+                                                                    player.velocity,
+                                                                    mass_b=0,
+                                                                    bounce=0.1)
 
         # Main loop ends here, put your code above this line
         yield
