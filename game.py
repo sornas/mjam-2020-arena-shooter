@@ -4,8 +4,10 @@ from dataclasses import dataclass
 # Asset dictionary for holding all your assets.
 assets = {}
 
+
 def clamp(val, low, high):
     return min(max(val, low), high)
+
 
 @dataclass
 class Player:
@@ -77,6 +79,7 @@ levels = [
 ##########
 """,
 ]
+
 
 def parse_level(level_string):
     GRID_SIZE = 40

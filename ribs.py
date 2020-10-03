@@ -258,6 +258,7 @@ def set_frame_rate(fps):
     FRAMERATE = fps
     DELTA = 1 / FRAMERATE
 
+
 def time():
     """Return the time since the program started."""
     return TIME
