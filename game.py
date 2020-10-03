@@ -18,8 +18,8 @@ def clamp(val, low, high):
 class Shot:
     centerx = 0
     centery = 0
-    width = 5
-    height = 5
+    width = 10
+    height = 10
     
     velocity = (0, 0)
     owner = None # shooter's id()
@@ -46,13 +46,15 @@ class Player:
     min_height = 1
     gesmol_speeed = 0.5
     small = False
+    shot_timeout = 0
 
     velocity = (0, 0)
 
     walk_acc = 1000.0
     max_speed = 250
     slow_down = 4
-    shot_speed = 100
+    shot_speed = 150
+    shot_delay_start = 1/5
 
 def update_player(player, delta):
     dx, dy = (0, 0)
@@ -83,7 +85,12 @@ def update_player(player, delta):
     if not player.small and key_down(" "):
         player.small = True
 
-    if key_down("c"):
+    if player.shot_timeout > 0:
+        player.shot_timeout -= delta
+        if player.shot_timeout < 0:
+            player.shot_timeout = 0
+
+    if key_down("c") and player.shot_timeout == 0:
         # shoot
         player_speed = vec_len(player.velocity)
         if player_speed != 0:
@@ -94,6 +101,7 @@ def update_player(player, delta):
             shot.velocity = (player.velocity[0] * (player.shot_speed / player_speed),
                              player.velocity[1] * (player.shot_speed / player_speed))
             shots.append(shot)
+            player.shot_timeout = player.shot_delay_start
 
 
     if player.small and player.width > player.min_width:
