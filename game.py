@@ -195,7 +195,7 @@ def update():
     player2.key_down = "k"
     player2.key_left = "j"
     player2.key_right = "l"
-    player2.key_small = "n"
+    player2.key_small = "h"
     player2.key_shoot = "."
 
     # Main update loop
@@ -216,11 +216,18 @@ def update():
         for shot in shots:
             draw_shot(shot)
 
-        for player in (player1, player2):
-            for shot in shots:
+        for shot in shots:
+            for other in shots:
+                if shot.shooter_idx != other.shooter_idx:
+                    _, depth = overlap_data(shot, other)
+                    if depth > 0:
+                        to_remove.append(shot)
+            for player in (player1, player2):
                 _, depth = overlap_data(player, shot)
                 if depth > 0 and player.idx != shot.shooter_idx:
                     print(f"{player.idx} ded by {shot.shooter_idx}")
+        for shot in to_remove:
+            shots.remove(shot)
 
         for wall in walls:
             window = pg.display.get_surface()
